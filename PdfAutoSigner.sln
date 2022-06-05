@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.2.32526.322
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DE864372-3EAB-4F5B-9B23-5870D5DEEB6A}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfAutoSigner.LocalApi", "PdfAutoSigner.LocalApi\PdfAutoSigner.LocalApi.csproj", "{AC02EDFD-EA1E-4CE5-AE0B-A51EDA689740}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfAutoSigner.Lib", "PdfAutoSigner.Lib\PdfAutoSigner.Lib.csproj", "{6B0A79A7-52DC-4923-BA39-B753F80744B4}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC02EDFD-EA1E-4CE5-AE0B-A51EDA689740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC02EDFD-EA1E-4CE5-AE0B-A51EDA689740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC02EDFD-EA1E-4CE5-AE0B-A51EDA689740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC02EDFD-EA1E-4CE5-AE0B-A51EDA689740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B0A79A7-52DC-4923-BA39-B753F80744B4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B0A79A7-52DC-4923-BA39-B753F80744B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B0A79A7-52DC-4923-BA39-B753F80744B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B0A79A7-52DC-4923-BA39-B753F80744B4}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {9C438A9C-857E-4B0D-9BD0-C3DA2E2F0A17}
+	EndGlobalSection
+EndGlobal
