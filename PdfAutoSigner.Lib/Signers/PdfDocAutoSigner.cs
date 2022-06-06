@@ -8,15 +8,15 @@ using static iText.Signatures.PdfSigner;
 
 namespace PdfAutoSigner.Lib.Signers
 {
-    public class PdfAutoSigner : IPdfAutoSigner
+    public class PdfDocAutoSigner : IDocAutoSigner
     {
-        private readonly ILogger<PdfAutoSigner> logger;
+        private readonly ILogger<PdfDocAutoSigner> logger;
 
-        public PdfAutoSigner(ILogger<PdfAutoSigner>? logger = null)
+        public PdfDocAutoSigner(ILogger<PdfDocAutoSigner>? logger = null)
         {
             if (logger == null)
             {
-                this.logger = NullLogger<PdfAutoSigner>.Instance;
+                this.logger = NullLogger<PdfDocAutoSigner>.Instance;
             }
         }
 

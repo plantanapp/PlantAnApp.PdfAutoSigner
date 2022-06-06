@@ -2,7 +2,7 @@
 
 namespace PdfAutoSigner.Lib.Signers
 {
-    public interface IPdfAutoSigner
+    public interface IDocAutoSigner
     {
         MemoryStream Sign(Stream inputStream, IExternalSignatureWithChain externalSignature, SignatureAppearanceDetails signatureAppearanceDetails);
     }
