@@ -1,4 +1,15 @@
-var builder = WebApplication.CreateBuilder(args);
+// Needed to be able to call UseWindowsServices
+using Microsoft.Extensions.Hosting.WindowsServices;
+
+var options = new WebApplicationOptions
+{
+    Args = args,
+    ContentRootPath = WindowsServiceHelpers.IsWindowsService() ? AppContext.BaseDirectory : default
+};
+var builder = WebApplication.CreateBuilder(options);
+
+// Add support to be able to run as Windows service or Linux \ Mac daemon
+builder.Host.UseWindowsService().UseSystemd();
 
 // Add services to the container.
 
