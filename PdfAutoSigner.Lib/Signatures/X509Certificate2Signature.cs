@@ -1,11 +1,14 @@
 ﻿using iText.Signatures;
+using Org.BouncyCastle.X509;
+using System.Net;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
 
 namespace PdfAutoSigner.Lib.Signatures
 {
     /// <summary>
-    /// Code obtained from https://git.itextsupport.com/projects/I5N/repos/itextsharp/browse/src/core/iTextSharp/text/pdf/security/X509Certificate2Signature.cs?at=refs/heads/develop
+    /// Original code obtained from https://git.itextsupport.com/projects/I5N/repos/itextsharp/browse/src/core/iTextSharp/text/pdf/security/X509Certificate2Signature.cs?at=refs/heads/develop
     /// </summary>
     internal class X509Certificate2Signature
     {
@@ -17,6 +20,8 @@ namespace PdfAutoSigner.Lib.Signatures
         private String hashAlgorithm;
         /** The encryption algorithm (obtained from the private key) */
         private String encryptionAlgorithm;
+
+        private Org.BouncyCastle.X509.X509Certificate[] chain;
 
         /// <summary>
         /// Creates a signature using a X509Certificate2. It supports smartcards without 
@@ -32,11 +37,84 @@ namespace PdfAutoSigner.Lib.Signatures
             this.certificate = certificate;
             this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(hashAlgorithm));
             if (certificate.PrivateKey is RSACryptoServiceProvider)
+            {
                 encryptionAlgorithm = "RSA";
+            }
+            else if (certificate.PrivateKey is RSACng)
+            {
+                encryptionAlgorithm = "RSA";
+            }
             else if (certificate.PrivateKey is DSACryptoServiceProvider)
+            {
                 encryptionAlgorithm = "DSA";
+            }
             else
                 throw new ArgumentException("Unknown encryption algorithm " + certificate.PrivateKey);
+        }
+
+        public X509Certificate2Signature Select(string pin)
+        {
+            X509CertificateParser objCP = new X509CertificateParser();
+            chain = new Org.BouncyCastle.X509.X509Certificate[] { objCP.ReadCertificate(certificate.RawData) };
+
+            return SetPin(pin);
+        }
+
+        private X509Certificate2Signature SetPin(string pin)
+        {
+            // For RSA and DSA
+            if (certificate.PrivateKey is ICspAsymmetricAlgorithm)
+            {
+                var cspAsymAlg = (ICspAsymmetricAlgorithm)certificate.PrivateKey;
+                CspParameters cspParameters =
+                    new CspParameters
+                    {
+                        ProviderType = cspAsymAlg.CspKeyContainerInfo.ProviderType,
+                        ProviderName = cspAsymAlg.CspKeyContainerInfo.ProviderName,
+                        KeyContainerName = cspAsymAlg.CspKeyContainerInfo.KeyContainerName,
+                        //KeyNumber = ((int)cspAsymAlg.CspKeyContainerInfo.KeyNumber),
+                        KeyPassword = new NetworkCredential("", pin).SecurePassword,
+                        Flags = CspProviderFlags.UseExistingKey | CspProviderFlags.NoPrompt
+                    };
+
+                // set modified RSA crypto provider back
+                if (certificate.PrivateKey is RSACryptoServiceProvider)
+                {
+                    certificate.PrivateKey = new RSACryptoServiceProvider(cspParameters);
+                }
+                else if (certificate.PrivateKey is DSACryptoServiceProvider)
+                {
+                    certificate.PrivateKey = new DSACryptoServiceProvider(cspParameters);
+                }
+            }
+            // Different approach is needed for RSACng
+            else if (certificate.PrivateKey is RSACng rsaCng)
+            {
+                // Set the PIN, an explicit null terminator is required to this Unicode/UCS-2 string.
+
+                byte[] propertyBytes;
+
+                if (pin[pin.Length - 1] == '\0')
+                {
+                    propertyBytes = Encoding.Unicode.GetBytes(pin);
+                }
+                else
+                {
+                    propertyBytes = new byte[Encoding.Unicode.GetByteCount(pin) + 2];
+                    Encoding.Unicode.GetBytes(pin, 0, pin.Length, propertyBytes, 0);
+                }
+
+                const string NCRYPT_PIN_PROPERTY = "SmartCardPin";
+
+                CngProperty pinProperty = new CngProperty(
+                    NCRYPT_PIN_PROPERTY,
+                    propertyBytes,
+                    CngPropertyOptions.None);
+
+                rsaCng.Key.SetProperty(pinProperty);
+            }
+
+            return this;
         }
 
         public virtual byte[] Sign(byte[] message)
@@ -45,6 +123,11 @@ namespace PdfAutoSigner.Lib.Signatures
             {
                 RSACryptoServiceProvider rsa = (RSACryptoServiceProvider)certificate.PrivateKey;
                 return rsa.SignData(message, hashAlgorithm);
+            }
+            else if (certificate.PrivateKey is RSACng)
+            {
+                RSACng rsa = (RSACng)certificate.PrivateKey;
+                return rsa.SignData(message, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             }
             else
             {
