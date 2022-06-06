@@ -14,6 +14,20 @@ builder.Host.UseWindowsService().UseSystemd();
 // Add configuration settings
 builder.Configuration.AddJsonFile("hostsettings.json", optional: true);
 
+// Enable CORS
+var allowedOrigins = builder.Configuration["AllowedOrigins"];
+if (!String.IsNullOrEmpty(allowedOrigins))
+{
+    var origins = allowedOrigins.Split(";");
+    builder.Services.AddCors(options =>
+    {
+        options.AddDefaultPolicy(policy =>
+        {
+            policy.WithOrigins(origins).AllowAnyMethod().AllowAnyHeader();
+        });
+    });
+}
+
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -23,6 +37,8 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 
 app.UseAuthorization();
+
+app.UseCors();
 
 app.MapControllers();
 
