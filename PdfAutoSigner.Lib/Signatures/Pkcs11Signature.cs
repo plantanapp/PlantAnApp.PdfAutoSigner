@@ -26,7 +26,7 @@ namespace PdfAutoSigner.Lib.Signatures
         {
             Pkcs11InteropFactories factories = new Pkcs11InteropFactories();
             pkcs11Library = factories.Pkcs11LibraryFactory.LoadPkcs11Library(factories, libraryPath, AppType.MultiThreaded);
-            slot = pkcs11Library.GetSlotList(SlotsType.WithOrWithoutTokenPresent).Find(slot => slot.SlotId == slotId);
+            slot = pkcs11Library.GetSlotList(SlotsType.WithTokenPresent).Find(slot => slot.SlotId == slotId);
         }
 
         public Pkcs11Signature Select(string alias, string certLabel, string pin)
