@@ -10,7 +10,7 @@ namespace PdfAutoSigner.Lib.Signatures
     /// <summary>
     /// Original code obtained from https://git.itextsupport.com/projects/I7NS/repos/samples/browse/itext/itext.publications/itext.publications.signing-examples.pkcs11/iText/SigningExamples/Pkcs11/Pkcs11Signature.cs
     /// </summary>
-    internal class Pkcs11Signature : IExternalSignature, IDisposable
+    public class Pkcs11Signature : IExternalSignatureWithChain, IDisposable
     {
         IPkcs11Library pkcs11Library;
         ISlot slot;

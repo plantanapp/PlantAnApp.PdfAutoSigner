@@ -10,7 +10,7 @@ namespace PdfAutoSigner.Lib.Signatures
     /// <summary>
     /// Original code obtained from https://git.itextsupport.com/projects/I5N/repos/itextsharp/browse/src/core/iTextSharp/text/pdf/security/X509Certificate2Signature.cs?at=refs/heads/develop
     /// </summary>
-    internal class X509Certificate2Signature
+    public class X509Certificate2Signature: IExternalSignatureWithChain
     {
         /// <summary>
         /// The certificate with the private key
@@ -134,6 +134,11 @@ namespace PdfAutoSigner.Lib.Signatures
                 DSACryptoServiceProvider dsa = (DSACryptoServiceProvider)certificate.PrivateKey;
                 return dsa.SignData(message);
             }
+        }
+
+        public Org.BouncyCastle.X509.X509Certificate[] GetChain()
+        {
+            return chain;
         }
 
         /**
