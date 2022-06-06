@@ -6,3 +6,6 @@
 **/obj/
 .vs/
 **/*.csproj.user
+
+**/hello-signed-pkcs11.pdf
+**/hello-signed-cert.pdf

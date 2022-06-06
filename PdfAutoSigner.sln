@@ -13,6 +13,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfAutoSigner.LocalApi", "P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfAutoSigner.Lib", "PdfAutoSigner.Lib\PdfAutoSigner.Lib.csproj", "{6B0A79A7-52DC-4923-BA39-B753F80744B4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfAutoSigner.Lib.Tests", "PdfAutoSigner.Lib.Tests\PdfAutoSigner.Lib.Tests.csproj", "{EA7C9FBA-8A44-4ABB-8E8B-455554E2195B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfAutoSigner.Lib.App", "PdfAutoSigner.Lib.App\PdfAutoSigner.Lib.App.csproj", "{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,14 @@ Global
 		{6B0A79A7-52DC-4923-BA39-B753F80744B4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6B0A79A7-52DC-4923-BA39-B753F80744B4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6B0A79A7-52DC-4923-BA39-B753F80744B4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EA7C9FBA-8A44-4ABB-8E8B-455554E2195B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EA7C9FBA-8A44-4ABB-8E8B-455554E2195B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EA7C9FBA-8A44-4ABB-8E8B-455554E2195B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EA7C9FBA-8A44-4ABB-8E8B-455554E2195B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
