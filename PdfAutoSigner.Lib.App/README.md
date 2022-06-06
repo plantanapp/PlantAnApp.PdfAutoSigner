@@ -4,15 +4,15 @@ dotnet publish -c Release --self-contained -r osx-x64 -p:PublishTrimmed=true -p:
 
 Run on mac:
 - pkcs11
-./SignerLib ../hello.pdf ../hello-signed.pdf /usr/local/lib/libeTPkcs11.dylib -p [pin]
+./PdfAutoSigner.Lib.App ../hello.pdf ../hello-signed.pdf /usr/local/lib/libeTPkcs11.dylib -p [pin]
 - cert
-./SignerLib ./hello.pdf ./hello-signed.pdf certSign -p [pin] -c
+./PdfAutoSigner.Lib.App ./hello.pdf ./hello-signed.pdf certSign -p [pin] -c
 
 Run on win:
 - pkcs11
-./SignerLib ./hello.pdf ./hello-signed.pdf "C:\Program Files (x86)\Gemalto\IDGo 800 PKCS#11\IDPrimePKCS1164.dll" -p [pin]
+./PdfAutoSigner.Lib.App ./hello.pdf ./hello-signed.pdf "C:\Program Files (x86)\Gemalto\IDGo 800 PKCS#11\IDPrimePKCS1164.dll" -p [pin]
 - cert
-./SignerLib ./hello.pdf ./hello-signed.pdf certSign -p [pin] -c
+./PdfAutoSigner.Lib.App ./hello.pdf ./hello-signed.pdf certSign -p [pin] -c
 
 Observations:
 The pin can also be obtained from UserSecrets (in VS) from the "TokenPin" path.
