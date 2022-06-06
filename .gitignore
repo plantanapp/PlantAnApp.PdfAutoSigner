@@ -2,6 +2,6 @@
 # This .gitignore file was automatically created by Microsoft(R) Visual Studio.
 ################################################################################
 
-/PdfAutoSigner.Lib/obj
-/PdfAutoSigner.LocalApi/obj
-/.vs/PdfAutoSigner/v17
+**/bin/
+**/obj/
+.vs/
