@@ -11,6 +11,9 @@ var builder = WebApplication.CreateBuilder(options);
 // Add support to be able to run as Windows service or Linux \ Mac daemon
 builder.Host.UseWindowsService().UseSystemd();
 
+// Add configuration settings
+builder.Configuration.AddJsonFile("hostsettings.json", optional: true);
+
 // Add services to the container.
 
 builder.Services.AddControllers();
