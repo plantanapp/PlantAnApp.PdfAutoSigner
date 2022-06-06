@@ -8,7 +8,7 @@ using Org.BouncyCastle.X509;
 namespace PdfAutoSigner.Lib.Signatures
 {
     /// <summary>
-    /// Code obained from https://git.itextsupport.com/projects/I7NS/repos/samples/browse/itext/itext.publications/itext.publications.signing-examples.pkcs11/iText/SigningExamples/Pkcs11/Pkcs11Signature.cs
+    /// Original code obtained from https://git.itextsupport.com/projects/I7NS/repos/samples/browse/itext/itext.publications/itext.publications.signing-examples.pkcs11/iText/SigningExamples/Pkcs11/Pkcs11Signature.cs
     /// </summary>
     internal class Pkcs11Signature : IExternalSignature, IDisposable
     {
