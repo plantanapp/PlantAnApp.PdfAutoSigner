@@ -4,13 +4,13 @@ namespace PdfAutoSigner.Lib.Signatures
 {
     public class SignatureFactory : ISignatureFactory
     {
-        public Pkcs11Signature CreatePkcs11Signature(string libraryPath, ulong slotId, string hashAlgorithm = "SHA256", string? alias = null, string? certLabel = null, string? pin = null)
+        public Pkcs11Signature CreatePkcs11Signature(string libraryPath, ulong slotId, string? pin = null, string hashAlgorithm = "SHA256", string? alias = null, string? certLabel = null)
         {
             return new Pkcs11Signature(libraryPath, slotId)
                 .Select(alias, certLabel, pin).SetHashAlgorithm(hashAlgorithm);
         }
 
-        public X509Certificate2Signature CreateX509Certificate2Signature(string issuerName, ulong signatureIdx, String hashAlgorithm, string pin)
+        public X509Certificate2Signature CreateX509Certificate2Signature(string issuerName, ulong signatureIdx, string? pin = null, string hashAlgorithm = "SHA-256")
         {
             var store = new X509Store(StoreName.My, StoreLocation.CurrentUser);
             store.Open(OpenFlags.MaxAllowed);
