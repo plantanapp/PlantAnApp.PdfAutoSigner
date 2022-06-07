@@ -1,5 +1,9 @@
 // Needed to be able to call UseWindowsServices
 using Microsoft.Extensions.Hosting.WindowsServices;
+using PdfAutoSigner.Lib.Signatures;
+using PdfAutoSigner.Lib.Signers;
+using PdfAutoSigner.LocalApi.Helpers;
+using PdfAutoSigner.LocalApi.Services;
 
 var options = new WebApplicationOptions
 {
@@ -13,6 +17,7 @@ builder.Host.UseWindowsService().UseSystemd();
 
 // Add configuration settings
 builder.Configuration.AddJsonFile("hostsettings.json", optional: true);
+builder.Configuration.AddJsonFile("tokensettings.json", optional: true);
 
 // Enable CORS
 var allowedOrigins = builder.Configuration["AllowedOrigins"];
@@ -29,7 +34,11 @@ if (!String.IsNullOrEmpty(allowedOrigins))
 }
 
 // Add services to the container.
-
+builder.Services.AddTransient<IOSHelper, OSHelper>();
+builder.Services.AddTransient<ITokenConfigService, TokenConfigService>();
+builder.Services.AddTransient<ISignatureFactory, SignatureFactory>();
+builder.Services.AddTransient<IDocAutoSigner, PdfDocAutoSigner>();
+builder.Services.AddTransient<ISignerService, SignerService>();
 builder.Services.AddControllers();
 
 var app = builder.Build();

@@ -14,10 +14,7 @@ namespace PdfAutoSigner.Lib.Signers
 
         public PdfDocAutoSigner(ILogger<PdfDocAutoSigner>? logger = null)
         {
-            if (logger == null)
-            {
-                this.logger = NullLogger<PdfDocAutoSigner>.Instance;
-            }
+            this.logger = logger ?? NullLogger<PdfDocAutoSigner>.Instance;
         }
 
         public MemoryStream Sign(Stream inputStream, IExternalSignatureWithChain externalSignature, SignatureAppearanceDetails signatureAppearanceDetails)

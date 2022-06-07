@@ -14,6 +14,7 @@ namespace PdfAutoSigner.Lib.Signatures
     {
         IPkcs11Library pkcs11Library;
         ISlot slot;
+        ITokenInfo tokenInfo;
         ISession session;
         IObjectHandle privateKeyHandle;
 
@@ -22,11 +23,14 @@ namespace PdfAutoSigner.Lib.Signatures
         string encryptionAlgorithm;
         string hashAlgorithm;
 
+        // TODO: Might need to rething this as the flow now is slighlty different than the original class.
         public Pkcs11Signature(string libraryPath, ulong slotId)
         {
             Pkcs11InteropFactories factories = new Pkcs11InteropFactories();
             pkcs11Library = factories.Pkcs11LibraryFactory.LoadPkcs11Library(factories, libraryPath, AppType.MultiThreaded);
+            // TODO: Handle case where nothing is found
             slot = pkcs11Library.GetSlotList(SlotsType.WithTokenPresent).Find(slot => slot.SlotId == slotId);
+            tokenInfo = slot.GetTokenInfo();
         }
 
         public Pkcs11Signature Select(string alias, string certLabel, string pin)
@@ -151,6 +155,11 @@ namespace PdfAutoSigner.Lib.Signatures
         public X509Certificate[] GetChain()
         {
             return chain;
+        }
+
+        public string GetSignatureIdentifyingName()
+        {
+            return $"{tokenInfo.ManufacturerId} - {tokenInfo.Model} - {tokenInfo.SerialNumber}";
         }
 
         public string GetEncryptionAlgorithm()

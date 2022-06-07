@@ -141,6 +141,11 @@ namespace PdfAutoSigner.Lib.Signatures
             return chain;
         }
 
+        public string GetSignatureIdentifyingName()
+        {
+            return $"{certificate.Subject} - {certificate.SerialNumber}";
+        }
+
         /**
          * Returns the hash algorithm.
          * @return  the hash algorithm (e.g. "SHA-1", "SHA-256,...")
