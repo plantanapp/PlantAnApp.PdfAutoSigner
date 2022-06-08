@@ -19,6 +19,9 @@ builder.Host.UseWindowsService().UseSystemd();
 builder.Configuration.AddJsonFile("hostsettings.json", optional: true);
 builder.Configuration.AddJsonFile("tokensettings.json", optional: true);
 
+// Enable logging to files
+builder.Logging.AddLog4Net();
+
 // Enable CORS
 var allowedOrigins = builder.Configuration["AllowedOrigins"];
 if (!String.IsNullOrEmpty(allowedOrigins))
