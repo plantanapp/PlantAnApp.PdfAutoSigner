@@ -49,11 +49,18 @@ namespace PdfAutoSigner.LocalApi.Services
             var signature = availableSignatures.Find(s => s.GetSignatureIdentifyingName() == signatureIdentifyingName);
             if (signature == null)
             {
-                logger.LogCritical($"The sign method was called with a signature identifying name {signatureIdentifyingName} that was not found");
-                throw new ArgumentException($"Could not find signature with identifying name {signatureIdentifyingName}");
+                throw new ApplicationException($"Could not find a signature with identifying name {signatureIdentifyingName}.");
             }
 
-            signature = signature.Select(pin);
+            try
+            {
+                signature = signature.Select(pin);
+            }
+            catch (Exception ex)
+            {
+                throw new ApplicationException($"Error accessing the signature {signature.GetSignatureIdentifyingName()} with the given pin.", ex);
+            }
+
             var signatureAppearance = CreateSignatureAppearanceDetails();
             var signedData = signer.Sign(inputStream, signature, signatureAppearance);
             return signedData;

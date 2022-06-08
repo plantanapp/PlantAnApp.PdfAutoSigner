@@ -22,14 +22,12 @@ namespace PdfAutoSigner.LocalApi.Services
             var deviceDataList = configuration.GetSection(TokenOptions.Pkcs11DevicesConfigPath).Get<List<Pkcs11DeviceData>>();
             if (deviceDataList == null)
             {
-                logger.LogCritical($"Could not load the section {TokenOptions.Pkcs11DevicesConfigPath}. Check the token settings json file.");
-                throw new FormatException("Could not parse the token settings json file."); 
+                throw new FormatException($"Could not parse the section {TokenOptions.Pkcs11DevicesConfigPath} in the token settings json file."); 
             }
 
             var os = osHelper.GetOS();
             if (os == null)
             {
-                logger.LogCritical($"OS is not supported");
                 throw new SystemException("OS is not supported.");
             }
 
@@ -49,8 +47,7 @@ namespace PdfAutoSigner.LocalApi.Services
             var certificateDataList = configuration.GetSection(TokenOptions.CerticatesConfigPath).Get<List<CertificateData>>();
             if (certificateDataList == null)
             {
-                logger.LogCritical($"Could not load the section {TokenOptions.CerticatesConfigPath}. Check the token settings json file.");
-                throw new FormatException("Could not parse the token settings json file.");
+                throw new FormatException($"Could not parse the section {TokenOptions.CerticatesConfigPath} in token settings json file.");
             }
 
             var certificateIssuerNames =

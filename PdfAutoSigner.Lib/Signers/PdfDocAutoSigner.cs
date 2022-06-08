@@ -32,6 +32,7 @@ namespace PdfAutoSigner.Lib.Signers
 
                 // TODO: Might need to give extimated size
                 signer.SignDetached(externalSignature, externalSignature.GetChain(), null, null, null, 0, CryptoStandard.CMS);
+                logger.LogInformation($"Signed document with signature {externalSignature.GetSignatureIdentifyingName()}");
 
                 // Copy the data from the closed temporary output stream into the final output stream.
                 var outputData = tempOutputStream.GetBuffer();

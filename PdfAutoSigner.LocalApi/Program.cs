@@ -3,6 +3,7 @@ using Microsoft.Extensions.Hosting.WindowsServices;
 using PdfAutoSigner.Lib.Signatures;
 using PdfAutoSigner.Lib.Signers;
 using PdfAutoSigner.LocalApi.Helpers;
+using PdfAutoSigner.LocalApi.Middlewares;
 using PdfAutoSigner.LocalApi.Services;
 
 var options = new WebApplicationOptions
@@ -51,6 +52,8 @@ var app = builder.Build();
 app.UseAuthorization();
 
 app.UseCors();
+
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
 
