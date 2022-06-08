@@ -21,8 +21,10 @@ namespace PdfAutoSigner.Lib.Signatures
 
         public Pkcs11Signature CreatePkcs11Signature(string libraryPath, ulong slotId, string? pin = null, string? alias = null, string? certLabel = null)
         {
-            return new Pkcs11Signature(libraryPath, slotId)
-                .Select(alias, certLabel, pin).SetHashAlgorithm(Pkcs11HashAlgorithm);
+            var pkcs11Signature = new Pkcs11Signature(libraryPath, slotId);
+            pkcs11Signature.Select(alias, certLabel, pin);
+            pkcs11Signature.SetHashAlgorithm(Pkcs11HashAlgorithm);
+            return pkcs11Signature;
         }
 
         public X509Certificate2Signature CreateX509Certificate2Signature(string issuerName, ulong signatureIdx, string? pin = null)
@@ -33,7 +35,9 @@ namespace PdfAutoSigner.Lib.Signatures
             var certificate = certificates[signatureIdx];
             store.Close();
 
-            return new X509Certificate2Signature(certificate, X509CertHashAlgorithm).Select(pin);
+            var x509Certsignature = new X509Certificate2Signature(certificate, X509CertHashAlgorithm);
+            x509Certsignature.Select(pin);
+            return x509Certsignature;
         }
 
         /// <summary>
@@ -55,7 +59,7 @@ namespace PdfAutoSigner.Lib.Signatures
                 }
                 catch (Exception ex)
                 {
-                    logger.LogInformation($"Could not find PKCS11 library {libraryPath}");
+                    logger.LogDebug($"Could not find PKCS11 library {libraryPath}");
                     continue;
                 }
 
@@ -66,7 +70,7 @@ namespace PdfAutoSigner.Lib.Signatures
                 }
                 catch (Exception ex)
                 {
-                    logger.LogInformation($"Could not find any token that uses PKCS11 library {libraryPath}");
+                    logger.LogDebug($"Could not find any token that uses PKCS11 library {libraryPath}");
                     continue;
                 }
 

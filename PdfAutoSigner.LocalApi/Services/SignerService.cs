@@ -53,6 +53,7 @@ namespace PdfAutoSigner.LocalApi.Services
                 throw new ArgumentException($"Could not find signature with identifying name {signatureIdentifyingName}");
             }
 
+            signature = signature.Select(pin);
             var signatureAppearance = CreateSignatureAppearanceDetails();
             var signedData = signer.Sign(inputStream, signature, signatureAppearance);
             return signedData;

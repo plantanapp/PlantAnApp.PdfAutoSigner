@@ -52,7 +52,7 @@ namespace PdfAutoSigner.Lib.Signatures
                 throw new ArgumentException("Unknown encryption algorithm " + certificate.PrivateKey);
         }
 
-        public X509Certificate2Signature Select(string pin)
+        public IExternalSignatureWithChain Select(string pin)
         {
             X509CertificateParser objCP = new X509CertificateParser();
             chain = new Org.BouncyCastle.X509.X509Certificate[] { objCP.ReadCertificate(certificate.RawData) };

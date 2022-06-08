@@ -33,7 +33,12 @@ namespace PdfAutoSigner.Lib.Signatures
             tokenInfo = slot.GetTokenInfo();
         }
 
-        public Pkcs11Signature Select(string alias, string certLabel, string pin)
+        public IExternalSignatureWithChain Select(string pin)
+        {
+            return Select(null, null, pin);
+        }
+
+        public Pkcs11Signature Select(string? alias, string? certLabel, string pin)
         {
             List<CKA> pkAttributeKeys = new List<CKA>();
             pkAttributeKeys.Add(CKA.CKA_KEY_TYPE);
