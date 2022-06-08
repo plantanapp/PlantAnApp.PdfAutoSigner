@@ -18,7 +18,6 @@ namespace PdfAutoSigner.LocalApi.Controllers
         [HttpGet]
         public ActionResult<List<string>> GetAvailableSignatures()
         {
-            // TODO: Handle exception cases
             var availableSignatures = signerService.GetAvailableSignatures();
             var signatureNames = availableSignatures.Select(s => s.GetSignatureIdentifyingName()).ToList();
 
@@ -29,6 +28,16 @@ namespace PdfAutoSigner.LocalApi.Controllers
         public IActionResult Post([FromForm] IFormFile file, [FromForm] string inputDataJson)
         {
             var inputData = JsonSerializer.Deserialize<SignInputData>(inputDataJson);
+
+            if (string.IsNullOrWhiteSpace(inputData.Pin))
+            {
+                return BadRequest("The pin must be specified.");
+            }
+            if (string.IsNullOrWhiteSpace(inputData.SignatureName))
+            {
+                return BadRequest("A signature must be selected.");
+            }
+
             var contentStream = new MemoryStream();
             file.CopyTo(contentStream);
 
