@@ -6,16 +6,23 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DE864372-3EAB-4F5B-9B23-5870D5DEEB6A}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		mac_install.sh = mac_install.sh
+		com.plantanapp.pdfautosigner.plist = com.plantanapp.pdfautosigner.plist
+		mac_uninstall.sh = mac_uninstall.sh
 		README.md = README.md
+		win_install.bat = win_install.bat
+		win_uninstall.bat = win_uninstall.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfAutoSigner.LocalApi", "PdfAutoSigner.LocalApi\PdfAutoSigner.LocalApi.csproj", "{AC02EDFD-EA1E-4CE5-AE0B-A51EDA689740}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfAutoSigner.Lib", "PdfAutoSigner.Lib\PdfAutoSigner.Lib.csproj", "{6B0A79A7-52DC-4923-BA39-B753F80744B4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfAutoSigner.Lib.Tests", "PdfAutoSigner.Lib.Tests\PdfAutoSigner.Lib.Tests.csproj", "{EA7C9FBA-8A44-4ABB-8E8B-455554E2195B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfAutoSigner.Lib.Tests", "PdfAutoSigner.Lib.Tests\PdfAutoSigner.Lib.Tests.csproj", "{EA7C9FBA-8A44-4ABB-8E8B-455554E2195B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfAutoSigner.Lib.App", "PdfAutoSigner.Lib.App\PdfAutoSigner.Lib.App.csproj", "{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfAutoSigner.Lib.App", "PdfAutoSigner.Lib.App\PdfAutoSigner.Lib.App.csproj", "{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PdfAutoSigner.LocalApi.Tests", "PdfAutoSigner.LocalApi.Tests\PdfAutoSigner.LocalApi.Tests.csproj", "{1E548593-F5F0-4141-B790-1E1B64DD69B7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +46,10 @@ Global
 		{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0ABDAD92-D6EE-4590-B71B-E6945223EDD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1E548593-F5F0-4141-B790-1E1B64DD69B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1E548593-F5F0-4141-B790-1E1B64DD69B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1E548593-F5F0-4141-B790-1E1B64DD69B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1E548593-F5F0-4141-B790-1E1B64DD69B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
