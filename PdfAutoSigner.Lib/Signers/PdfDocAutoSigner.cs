@@ -19,25 +19,25 @@ namespace PdfAutoSigner.Lib.Signers
 
         public MemoryStream Sign(Stream inputStream, IExternalSignatureWithChain externalSignature, SignatureAppearanceDetails signatureAppearanceDetails)
         {
-            using (PdfReader reader = new PdfReader(inputStream))
-            {
-                var stampingProperties = new StampingProperties().UseAppendMode();
+            using var reader = new PdfReader(inputStream);
+            using var tempOutputStream = new MemoryStream(0);
 
-                // Signer.SignDetached will close the stream. We need to create a temporary stream to be used from the signer and then copy the content into the output
-                var tempOutputStream = new MemoryStream(0);
-                var signer = new PdfSigner(reader, tempOutputStream, stampingProperties);
+            var stampingProperties = new StampingProperties().UseAppendMode();
 
-                // Set appearance
-                signer.UpdateSignatureAppearance(signatureAppearanceDetails);
+            // Signer.SignDetached will close the stream. We need to create a temporary stream to be used from the signer and then copy the content into the output
 
-                // TODO: Might need to give extimated size
-                signer.SignDetached(externalSignature, externalSignature.GetChain(), null, null, null, 0, CryptoStandard.CMS);
-                logger.LogInformation($"Signed document with signature {externalSignature.GetSignatureIdentifyingName()}");
+            var signer = new PdfSigner(reader, tempOutputStream, stampingProperties);
 
-                // Copy the data from the closed temporary output stream into the final output stream.
-                var outputData = tempOutputStream.GetBuffer();
-                return new MemoryStream(outputData);
-            }
+            // Set appearance
+            signer.UpdateSignatureAppearance(signatureAppearanceDetails);
+
+            // TODO: Might need to give extimated size
+            signer.SignDetached(externalSignature, externalSignature.GetChain(), null, null, null, 0, CryptoStandard.CMS);
+            logger.LogInformation($"Signed document with signature {externalSignature.GetSignatureIdentifyingName()}");
+
+            // Copy the data from the closed temporary output stream into the final output stream.
+            var outputData = tempOutputStream.GetBuffer();
+            return new MemoryStream(outputData);
         }
     }
 }

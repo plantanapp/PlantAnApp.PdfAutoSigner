@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 sudo launchctl unload /Library/LaunchDaemons/org.plantanapp.pdfautosigner.plist
 

@@ -1,4 +1,4 @@
-#!bin/bash
+#!/bin/bash
 
 # We need to first create the destination folder
 sudo mkdir -p /Applications/PlantAnApp/PdfAutoSigner

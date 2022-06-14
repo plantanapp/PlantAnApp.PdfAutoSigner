@@ -1,0 +1,15 @@
+#!/bin/bash
+
+# Edit the plist to contain the actual installation folder
+# Uses variables passed by the pkg builder to this script:
+# $0 = path to the script
+# $1  = path to the package
+# $2 = target location
+# $3 = target volume
+plutil -replace Program -string "$2/PdfAutoSigner.LocalApi" com.plantanapp.pdfautosigner.plist
+
+# Copy the plist file in the daemons folder
+sudo cp com.plantanapp.pdfautosigner.plist /Library/LaunchDaemons/
+
+# -w flag permanently adds the plist to the Launch Daemon
+sudo launchctl load -w /Library/LaunchDaemons/com.plantanapp.pdfautosigner.plist

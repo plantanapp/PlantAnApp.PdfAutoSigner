@@ -1,0 +1,5 @@
+#!/bin/bash
+
+if /bin/launchctl list "com.plantanapp.pdfautosigner" &> /dev/null; then
+    /bin/launchctl unload "/Library/LaunchDaemons/com.plantanapp.pdfautosigner"
+fi

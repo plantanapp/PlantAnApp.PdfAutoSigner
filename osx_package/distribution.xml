@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<installer-gui-script minSpecVersion="1">
+	<title>PdfAutoSigner</title>
+	<organization>com.plantanapp.pdfautosigner</organization>
+	<domains enable_localSystem="true"/>
+	<options customize="never" require-scripts="true" rootVolumeOnly="true" />
+	<!-- Define documents displayed at various steps -->
+	<welcome    file="welcome.html"    mime-type="text/html" />
+	<license    file="license.html"    mime-type="text/html" />
+	<conclusion file="conclusion.html" mime-type="text/html" />
+	<!-- List all component packages -->
+	<pkg-ref id="com.plantanapp.pdfautosigner"
+             version="1.0.0.0"
+             auth="root">output.pkg</pkg-ref>
+	<!-- List them again here. They can now be organized
+         as a hierarchy if you want. -->
+	<choices-outline>
+		<line choice="com.plantanapp.pdfautosigner"/>
+	</choices-outline>
+	<!-- Define each choice above -->
+	<choice
+        id="com.plantanapp.pdfautosigner"
+        visible="false"
+        title="PdfAutoSigner"
+        description="Automatically sign PDFs."
+        start_selected="true"
+		customLocation="/Applications/PlantAnApp/PdfAutoSigner">
+		<pkg-ref id="com.plantanapp.pdfautosigner"/>
+	</choice>
+</installer-gui-script>

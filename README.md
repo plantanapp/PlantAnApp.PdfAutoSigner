@@ -8,3 +8,4 @@ The installation file is win_install.bat. This will copy the publish folder cont
 MacOS:
 The Unix line endings must be preserved
 Besides the publish folder and the mac_install.sh file, also copy the plist file next to the installation file.
+
