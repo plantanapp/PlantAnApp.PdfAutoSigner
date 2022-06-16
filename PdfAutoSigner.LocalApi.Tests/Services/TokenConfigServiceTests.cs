@@ -103,7 +103,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
             var certIssuerData = new List<CertificateData> { certData1, certData2 };
             var tokenOptions = new TokenOptions
             {
-                CerticateIssuerNames = certIssuerData
+                Certificates = certIssuerData
             };
             tokenOptionsSnapshotMock.Setup(to => to.Value).Returns(tokenOptions);
 
