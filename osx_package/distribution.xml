@@ -5,13 +5,11 @@
 	<domains enable_localSystem="true"/>
 	<options customize="never" require-scripts="true" rootVolumeOnly="true" />
 	<!-- Define documents displayed at various steps -->
-	<welcome    file="welcome.html"    mime-type="text/html" />
-	<license    file="license.html"    mime-type="text/html" />
-	<conclusion file="conclusion.html" mime-type="text/html" />
+	<license file="license.rtf" mime-type="application/rtf" />
 	<!-- List all component packages -->
 	<pkg-ref id="com.plantanapp.pdfautosigner"
-             version="1.0.0.0"
              auth="root">output.pkg</pkg-ref>
+			 <!--version="1.0.0.0"-->
 	<!-- List them again here. They can now be organized
          as a hierarchy if you want. -->
 	<choices-outline>
@@ -21,7 +19,7 @@
 	<choice
         id="com.plantanapp.pdfautosigner"
         visible="false"
-        title="PdfAutoSigner"
+        title="Pdf Auto Signer"
         description="Automatically sign PDFs."
         start_selected="true"
 		customLocation="/Applications/PlantAnApp/PdfAutoSigner">
