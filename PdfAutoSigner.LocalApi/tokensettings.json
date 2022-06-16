@@ -27,7 +27,7 @@
                 ]
             }
         ],
-        "Certicates": [
+        "Certificates": [
             {
                 "Name": "CertSign",
                 "CertificateIssuerName": "certSIGN"

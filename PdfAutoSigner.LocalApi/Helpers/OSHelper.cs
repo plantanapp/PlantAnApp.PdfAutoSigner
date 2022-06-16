@@ -22,5 +22,10 @@ namespace PdfAutoSigner.LocalApi.Helpers
 
             return null;
         }
+
+        public Architecture GetArchitecture()
+        {
+            return RuntimeInformation.OSArchitecture;
+        }
     }
 }

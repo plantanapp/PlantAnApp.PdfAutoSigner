@@ -5,6 +5,7 @@ namespace PdfAutoSigner.LocalApi.Helpers
 {
     public interface IOSHelper
     {
+        Architecture GetArchitecture();
         SupportedOS? GetOS();
     }
 }

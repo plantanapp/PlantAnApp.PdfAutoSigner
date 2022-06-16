@@ -1,25 +1,25 @@
-﻿using PdfAutoSigner.LocalApi.Config;
+﻿using Microsoft.Extensions.Options;
+using PdfAutoSigner.LocalApi.Config;
 using PdfAutoSigner.LocalApi.Helpers;
 using System.Runtime.InteropServices;
+using System.Text.Json;
 
 namespace PdfAutoSigner.LocalApi.Services
 {
     public class TokenConfigService : ITokenConfigService
     {
-        private readonly IConfiguration configuration;
+        private readonly IOptionsSnapshot<TokenOptions> tokenOptionsSnapshot;
         private readonly IOSHelper osHelper;
-        private ILogger<TokenConfigService> logger;
 
-        public TokenConfigService(IConfiguration configuration, IOSHelper osHelper, ILogger<TokenConfigService> logger)
+        public TokenConfigService(IOptionsSnapshot<TokenOptions> tokenOptionsSnapshot, IOSHelper osHelper)
         {
-            this.configuration = configuration;
+            this.tokenOptionsSnapshot = tokenOptionsSnapshot;
             this.osHelper = osHelper;
-            this.logger = logger;
         }
 
         public List<string> GetPkcs11LibPathsByOS()
         {
-            var deviceDataList = configuration.GetSection(TokenOptions.Pkcs11DevicesConfigPath).Get<List<Pkcs11DeviceData>>();
+            var deviceDataList = tokenOptionsSnapshot.Value.Pkcs11Devices;
             if (deviceDataList == null)
             {
                 throw new FormatException($"Could not parse the section {TokenOptions.Pkcs11DevicesConfigPath} in the token settings json file."); 
@@ -31,7 +31,7 @@ namespace PdfAutoSigner.LocalApi.Services
                 throw new SystemException("OS is not supported.");
             }
 
-            var architecture = RuntimeInformation.OSArchitecture;
+            var architecture = osHelper.GetArchitecture();
 
             var libPaths =
                 from device in deviceDataList
@@ -44,10 +44,10 @@ namespace PdfAutoSigner.LocalApi.Services
 
         public List<string> GetIssuerNames()
         {
-            var certificateDataList = configuration.GetSection(TokenOptions.CerticatesConfigPath).Get<List<CertificateData>>();
+            var certificateDataList = tokenOptionsSnapshot.Value.Certificates;
             if (certificateDataList == null)
             {
-                throw new FormatException($"Could not parse the section {TokenOptions.CerticatesConfigPath} in token settings json file.");
+                throw new FormatException($"Could not parse the section {TokenOptions.CertificatesConfigPath} in token settings json file.");
             }
 
             var certificateIssuerNames =

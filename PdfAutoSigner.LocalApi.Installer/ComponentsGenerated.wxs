@@ -2,31 +2,31 @@
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
         <DirectoryRef Id="INSTALLFOLDER">
-            <Component Id="cmpA0863526952F7834E7C922F065E4C8A8" Guid="{2D616951-DA2F-4176-9BD7-6B7332FEF481}">
+            <Component Id="cmpA0863526952F7834E7C922F065E4C8A8" Guid="{AC22BF68-A234-4581-8767-FF817C7D9836}">
                 <File Id="filC04B02D0CCC2D5CCC1013B35DE86DB29" KeyPath="yes" Source="$(var.BasePath)\appsettings.Development.json" />
             </Component>
-            <Component Id="cmpF82FCA80BBAF44D285C97F10993DEEE6" Guid="{E765D983-AA94-4848-B910-78A8C924CD14}">
+            <Component Id="cmpF82FCA80BBAF44D285C97F10993DEEE6" Guid="{43982FCC-39A8-4281-869B-B5931AD07538}">
                 <File Id="fil840B80AC19861C7F9F04FBDCFAE331CE" KeyPath="yes" Source="$(var.BasePath)\appsettings.json" />
             </Component>
-            <Component Id="cmp07CAF59AC988C09B0D7F8E87284AAFCA" Guid="{98959C56-0440-4BEE-BB99-ACB1130BAE05}">
+            <Component Id="cmp07CAF59AC988C09B0D7F8E87284AAFCA" Guid="{9A752BDD-B432-4383-A2E9-DE0523AA427F}">
                 <File Id="fil3EF99912535F209EA7FB64BE64AEF7EF" KeyPath="yes" Source="$(var.BasePath)\aspnetcorev2_inprocess.dll" />
             </Component>
-            <Component Id="cmpFEDF4DFA76D910658BCEDEBD4353FB46" Guid="{96D014E4-67CE-4286-A8BD-B8EB361D2CBC}">
+            <Component Id="cmpFEDF4DFA76D910658BCEDEBD4353FB46" Guid="{CCC8F415-D52D-4499-A8CD-1C218D84FB14}">
                 <File Id="fil3D2B3B8D2E39E5AA5E0B6AF0717F93FC" KeyPath="yes" Source="$(var.BasePath)\hostsettings.json" />
             </Component>
-            <Component Id="cmpCF9EB4896E2EFEE045E5A3D1E1FE31D7" Guid="{459B2EB0-6CC4-4B7A-B215-2FFD5A5E0580}">
+            <Component Id="cmpCF9EB4896E2EFEE045E5A3D1E1FE31D7" Guid="{BE1B65D5-0FD9-416B-A8C8-75C6CA1D5282}">
                 <File Id="filB964C172B7BDE8C7CF001F5BE6F5559E" KeyPath="yes" Source="$(var.BasePath)\log4net.config" />
             </Component>
-            <Component Id="cmpD6D3DADA9391875AF2602CED4976A7D9" Guid="{AFB43201-9EBD-453B-A782-C839EBEDCDAB}">
+            <Component Id="cmpD6D3DADA9391875AF2602CED4976A7D9" Guid="{4E7231CF-D3FF-4DDA-A1B4-817C7907F7E3}">
                 <File Id="filD6CB1AB2CD0A0D6C1544B4C30D1BF20A" KeyPath="yes" Source="$(var.BasePath)\PdfAutoSigner.Lib.pdb" />
             </Component>
-            <Component Id="cmpAF51ECD5D2FCDC8858A8EA6AB00C6158" Guid="{1ADEAAE0-A226-4525-8638-D87E8E3A7811}">
+            <Component Id="cmpAF51ECD5D2FCDC8858A8EA6AB00C6158" Guid="{397A43E0-0185-4360-818D-6355D961644E}">
                 <File Id="fil80129B103266F1886048561282205336" KeyPath="yes" Source="$(var.BasePath)\PdfAutoSigner.LocalApi.pdb" />
             </Component>
-            <Component Id="cmpE260D087049B4CD118DAE3442E2EE672" Guid="{B5A445E9-D5B5-48D5-A79D-F86CC7C2D451}">
+            <Component Id="cmpE260D087049B4CD118DAE3442E2EE672" Guid="{C044E239-4117-47D6-B80B-0FB594B83148}">
                 <File Id="fil5F766188732A46FF1838D510006FC278" KeyPath="yes" Source="$(var.BasePath)\tokensettings.json" />
             </Component>
-            <Component Id="cmpB139B49DF4DF8F44C525B449EA8187F7" Guid="{B2C6B285-93BD-4687-B7D0-5C1F258C62D2}">
+            <Component Id="cmpB139B49DF4DF8F44C525B449EA8187F7" Guid="{FAE8E465-D40D-496E-995C-2EAD06330437}">
                 <File Id="filE7A3E65CC622C2E3B9B57707B12C9645" KeyPath="yes" Source="$(var.BasePath)\web.config" />
             </Component>
         </DirectoryRef>

@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Hosting.WindowsServices;
 using PdfAutoSigner.Lib.Signatures;
 using PdfAutoSigner.Lib.Signers;
+using PdfAutoSigner.LocalApi.Config;
 using PdfAutoSigner.LocalApi.Helpers;
 using PdfAutoSigner.LocalApi.Middlewares;
 using PdfAutoSigner.LocalApi.Services;
@@ -38,10 +39,12 @@ if (!String.IsNullOrEmpty(allowedOrigins))
 }
 
 // Add services to the container.
+builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenOptions.TokensConfigPath));
 builder.Services.AddTransient<IOSHelper, OSHelper>();
 builder.Services.AddTransient<ITokenConfigService, TokenConfigService>();
 builder.Services.AddTransient<ISignatureFactory, SignatureFactory>();
 builder.Services.AddTransient<IDocAutoSigner, PdfDocAutoSigner>();
+builder.Services.AddTransient<ISignaturesProviderService, SignaturesProviderService>();
 builder.Services.AddTransient<ISignerService, SignerService>();
 builder.Services.AddControllers();
 

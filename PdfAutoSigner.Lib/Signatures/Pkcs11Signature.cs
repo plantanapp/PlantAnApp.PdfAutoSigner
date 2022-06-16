@@ -23,15 +23,22 @@ namespace PdfAutoSigner.Lib.Signatures
         string encryptionAlgorithm;
         string hashAlgorithm;
 
-        // TODO: Might need to rething this as the flow now is slighlty different than the original class.
-        public Pkcs11Signature(string libraryPath, ulong slotId)
+        public Pkcs11Signature(ISlot slot)
         {
-            Pkcs11InteropFactories factories = new Pkcs11InteropFactories();
-            pkcs11Library = factories.Pkcs11LibraryFactory.LoadPkcs11Library(factories, libraryPath, AppType.MultiThreaded);
-            // TODO: Handle case where nothing is found
-            slot = pkcs11Library.GetSlotList(SlotsType.WithTokenPresent).Find(slot => slot.SlotId == slotId);
-            tokenInfo = slot.GetTokenInfo();
+            this.slot = slot;
+            this.tokenInfo = slot.GetTokenInfo();
         }
+
+        // TODO: Might need to rethink this as the flow now is slighlty different than the original class.
+        //[Obsolete]
+        //public Pkcs11Signature(string libraryPath, ulong slotId)
+        //{
+        //    Pkcs11InteropFactories factories = new Pkcs11InteropFactories();
+        //    pkcs11Library = factories.Pkcs11LibraryFactory.LoadPkcs11Library(factories, libraryPath, AppType.MultiThreaded);
+        //    // TODO: Handle case where nothing is found
+        //    slot = pkcs11Library.GetSlotList(SlotsType.WithTokenPresent).Find(slot => slot.SlotId == slotId);
+        //    tokenInfo = slot.GetTokenInfo();
+        //}
 
         public IExternalSignatureWithChain Select(string pin)
         {

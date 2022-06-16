@@ -6,45 +6,18 @@ namespace PdfAutoSigner.LocalApi.Services
 {
     public class SignerService : ISignerService
     {
-        private ITokenConfigService tokenConfigService;
-        private ISignatureFactory signatureFactory;
+        private ISignaturesProviderService signaturesProviderService;
         private IDocAutoSigner signer;
-        private ILogger<SignerService> logger;
 
-        public SignerService(ITokenConfigService tokenConfigService, ISignatureFactory signatureFactory, IDocAutoSigner signer, ILogger<SignerService> logger)
+        public SignerService(ISignaturesProviderService signaturesProviderService, IDocAutoSigner signer)
         {
-            this.tokenConfigService = tokenConfigService;
-            this.signatureFactory = signatureFactory;
+            this.signaturesProviderService = signaturesProviderService;
             this.signer = signer;
-            this.logger = logger;
-        }
-
-        public List<IExternalSignatureWithChain> GetAvailableSignatures()
-        {
-            var availableSignatures = new List<IExternalSignatureWithChain>();
-
-            var pkcs11LibPaths = tokenConfigService.GetPkcs11LibPathsByOS();
-            var availablePkcs11Signatures = signatureFactory.GetAvailablePkcs11Signatures(pkcs11LibPaths);
-            availableSignatures.AddRange(availablePkcs11Signatures);
-
-            var certIssuerNames = tokenConfigService.GetIssuerNames();
-            var availableCertSignatures = signatureFactory.GetAvailableX509Certificate2Signatures(certIssuerNames);
-            availableSignatures.AddRange(availableCertSignatures);
-
-            return availableSignatures;
-        }
-
-        public List<string> GetAvailableSignatureNames()
-        {
-            var availableSignatures = GetAvailableSignatures();
-
-            var availableSignatureNames = availableSignatures.Select(s => s.GetSignatureIdentifyingName()).ToList();
-            return availableSignatureNames;
         }
 
         public MemoryStream Sign(Stream inputStream, string signatureIdentifyingName, string pin)
         {
-            var availableSignatures = GetAvailableSignatures();
+            var availableSignatures = signaturesProviderService.GetAvailableSignatures();
 
             var signature = availableSignatures.Find(s => s.GetSignatureIdentifyingName() == signatureIdentifyingName);
             if (signature == null)

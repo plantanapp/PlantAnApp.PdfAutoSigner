@@ -9,8 +9,8 @@ namespace PdfAutoSigner.Lib.Signatures
     public class SignatureFactory : ISignatureFactory
     {
         // For now only SHA256 is supported.
-        private static readonly string Pkcs11HashAlgorithm = "SHA256";
-        private static readonly string X509CertHashAlgorithm = "SHA-256";
+        public static readonly string Pkcs11HashAlgorithm = "SHA256";
+        public static readonly string X509CertHashAlgorithm = "SHA-256";
 
         private ILogger<SignatureFactory> logger;
 
@@ -21,7 +21,12 @@ namespace PdfAutoSigner.Lib.Signatures
 
         public Pkcs11Signature CreatePkcs11Signature(string libraryPath, ulong slotId, string? pin = null, string? alias = null, string? certLabel = null)
         {
-            var pkcs11Signature = new Pkcs11Signature(libraryPath, slotId);
+            var factories = new Pkcs11InteropFactories();
+            var pkcs11Library = factories.Pkcs11LibraryFactory.LoadPkcs11Library(factories, libraryPath, AppType.MultiThreaded);
+            // TODO: Handle case where nothing is found
+            var slot = pkcs11Library.GetSlotList(SlotsType.WithTokenPresent).Find(slot => slot.SlotId == slotId);
+
+            var pkcs11Signature = new Pkcs11Signature(slot);
             pkcs11Signature.Select(alias, certLabel, pin);
             pkcs11Signature.SetHashAlgorithm(Pkcs11HashAlgorithm);
             return pkcs11Signature;
@@ -77,7 +82,8 @@ namespace PdfAutoSigner.Lib.Signatures
                 foreach (var slot in slots ?? new List<ISlot>())
                 {
                     logger.LogInformation($"Found token using library {libraryPath} on slot {slot.SlotId}");
-                    var pkcs11Signature = new Pkcs11Signature(libraryPath, slot.SlotId).SetHashAlgorithm(Pkcs11HashAlgorithm);
+                    var pkcs11Signature = new Pkcs11Signature(slot);
+                    //var pkcs11Signature = new Pkcs11Signature(libraryPath, slot.SlotId).SetHashAlgorithm(Pkcs11HashAlgorithm);
                     pkcs11Signatures.Add(pkcs11Signature);
                 }
             }

@@ -10,22 +10,24 @@ namespace PdfAutoSigner.LocalApi.Controllers
     public class SignController : ControllerBase
     {
         private ISignerService signerService;
-        public SignController(ISignerService signerService)
+        private ISignaturesProviderService signaturesProviderService;
+        public SignController(ISignerService signerService, ISignaturesProviderService signaturesProviderService)
         {
             this.signerService = signerService;
+            this.signaturesProviderService = signaturesProviderService;   
         }
 
         [HttpGet]
         public ActionResult<List<string>> GetAvailableSignatures()
         {
-            var availableSignatures = signerService.GetAvailableSignatures();
+            var availableSignatures = signaturesProviderService.GetAvailableSignatures();
             var signatureNames = availableSignatures.Select(s => s.GetSignatureIdentifyingName()).ToList();
 
             return Ok(signatureNames);
         }
 
         [HttpPost]
-        public IActionResult Post([FromForm] IFormFile file, [FromForm] string inputDataJson)
+        public IActionResult Sign([FromForm] IFormFile file, [FromForm] string inputDataJson)
         {
             var inputData = JsonSerializer.Deserialize<SignInputData>(inputDataJson);
 
@@ -37,9 +39,6 @@ namespace PdfAutoSigner.LocalApi.Controllers
             {
                 return BadRequest("A signature must be selected.");
             }
-
-            var contentStream = new MemoryStream();
-            file.CopyTo(contentStream);
 
             var inputMemStream = new MemoryStream();
             file.CopyTo(inputMemStream);
