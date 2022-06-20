@@ -3,14 +3,115 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
-pool:
-  vmImage: ubuntu-latest
+trigger: none
 
-steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+jobs:
+  - job: WindowsInstallers
+    displayName: Creates the Windows 32 bit and 64 bit installers
+    pool: 
+      vmImage: 'windows-latest'
+    variables:
+      solution: './PdfAutoSigner.sln'
+      winInstallerProject: './PdfAutoSigner.LocalApi.Installer/PdfAutoSigner.LocalApi.Installer.wixproj'
+      buildConfiguration: 'Release'
+    strategy:
+      matrix:
+        x86:
+          buildPlatform: 'x86'
+        x64:
+          buildPlatform: 'x64'
+    steps:
+      - task: NuGetToolInstaller@1
 
-- script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '$(solution)'
+
+      - task: VSBuild@1
+        inputs:
+          solution: '$(winInstallerProject)'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
+          clean: true
+
+      - task: VSBuild@1
+        inputs:
+          solution: '**\*.Tests.csproj'
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
+          clean: true
+
+      - task: VSTest@2
+        inputs:
+          platform: '$(buildPlatform)'
+          configuration: '$(buildConfiguration)'
+
+      - task: CopyFiles@2
+        inputs:
+          sourceFolder: '$(Build.SourcesDirectory)/PdfAutoSigner.LocalApi.Installer/bin/$(buildConfiguration)'
+          Contents: '**\*.msi'
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Build.ArtifactStagingDirectory)'
+          artifact: 'PdfAutoSigner-$(buildConfiguration)-win-$(buildPlatform)'
+          publishLocation: 'pipeline'
+
+  - job: MacOSPackage
+    displayName: Creates the MacOS 64 bit installer
+    pool: 
+      vmImage: 'macOS-latest'
+    variables:
+      solution: './PdfAutoSigner.sln'
+      buildProject: './PdfAutoSigner.LocalApi/PdfAutoSigner.LocalApi.csproj'
+      buildConfiguration: 'Release'
+      buildPlatform: 'x64'
+    steps:
+      - task: UseDotNet@2
+        displayName: Install .NET Core 6
+        inputs:
+          packageType: 'sdk'
+          version: '6.0.300'
+    
+      - task: NuGetToolInstaller@1
+
+      - task: NuGetCommand@2
+        inputs:
+          restoreSolution: '$(buildProject)'
+          
+      - task: DotNetCoreCLI@2
+        displayName: 'Build project'
+        inputs:
+          command: 'publish'
+          projects: '$(buildProject)'
+          arguments: '-c $(buildConfiguration) --self-contained -r osx-$(buildPlatform) -p:PublishTrimmed=true -p:PublishSingleFile=true'
+          zipAfterPublish: false
+          
+      - task: CopyFiles@2
+        displayName: 'Copy the publish folder'
+        inputs:
+          sourceFolder: '$(Build.SourcesDirectory)/PdfAutoSigner.LocalApi/bin/$(buildConfiguration)'
+          Contents: '**/publish/*'
+          targetFolder: '$(Build.SourcesDirectory)/osx_package/publish'
+          CleanTargetFolder: true
+          OverWrite: true
+          flattenFolders: true
+          
+      - task: ShellScript@2
+        displayName: 'Build osx package'
+        inputs:
+          scriptPath: '$(Build.SourcesDirectory)/osx_package/build.sh'
+
+      - task: CopyFiles@2
+        displayName: 'Copy the osx package to the staging directory'
+        inputs:
+          sourceFolder: '$(Build.SourcesDirectory)/osx_package'
+          Contents: '**/PdfAutoSigner.pkg'
+          targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+      - task: PublishPipelineArtifact@1
+        inputs:
+          targetPath: '$(Build.ArtifactStagingDirectory)'
+          artifact: 'PdfAutoSigner-$(buildConfiguration)-osx-$(buildPlatform)'
+          publishLocation: 'pipeline'

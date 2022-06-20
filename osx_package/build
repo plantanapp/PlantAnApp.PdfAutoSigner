@@ -1,7 +1,0 @@
-#!/bin/bash
-
-cp -R ./osx_package/ /Applications/PdfAutoSignerPkg
-
-pkgbuild --root /Applications/PdfAutoSignerPkg/publish --identifier com.plantanapp.pdfautosigner --version 1.0.0.0 --ownership recommended --scripts /Applications/PdfAutoSignerPkg/scripts /Applications/PdfAutoSignerPkg/output.pkg
-
-productbuild --distribution /Applications/PdfAutoSignerPkg/distribution.xml --resources resources --package-path /Applications/PdfAutoSignerPkg --version 1.0.0.0 /Applications/PdfAutoSignerPkg/PdfAutoSignerPkg.pkg

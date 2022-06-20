@@ -85,13 +85,13 @@
     <!-- Harvest file components from publish folder -->
     <HeatDirectory OutputFile="ComponentsGenerated.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" Directory="..\PdfAutoSigner.LocalApi\bin\$(Configuration)\net6.0\win-$(Platform)\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" Transforms="RemoveExeComponentsTransform.xslt" RunAsSeparateProcess="$(RunWixToolsOutOfProc)" />
   </Target>
-  <Target Name="AfterBuild">
+  <!-- <Target Name="AfterBuild"> -->
     <!-- Get assembly version -->
-    <GetAssemblyIdentity AssemblyFiles="..\PdfAutoSigner.LocalApi\bin\$(Configuration)\net6.0\win-$(Platform)\PdfAutoSigner.LocalApi.dll">
-      <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />
-    </GetAssemblyIdentity>
+    <!-- <GetAssemblyIdentity AssemblyFiles="..\PdfAutoSigner.LocalApi\bin\$(Configuration)\net6.0\win-$(Platform)\PdfAutoSigner.LocalApi.dll"> -->
+      <!-- <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" /> -->
+    <!-- </GetAssemblyIdentity> -->
     <!-- Rename the final MSI -->
-    <Exec Command="if not exist Installs mkdir Installs" />
-    <Exec Command="move bin\$(Configuration)\$(OutputName).msi Installs\PdfAutoSigner-%(AssemblyVersion.Version)-$(Configuration)-$(Platform).msi" />
-  </Target>
+    <!-- <Exec Command="if not exist Installs mkdir Installs" /> -->
+    <!-- <Exec Command="move bin\$(Configuration)\$(OutputName).msi Installs\PdfAutoSigner-%(AssemblyVersion.Version)-$(Configuration)-$(Platform).msi" /> -->
+  <!-- </Target> -->
 </Project>

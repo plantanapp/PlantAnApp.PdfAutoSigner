@@ -6,6 +6,7 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{DE864372-3EAB-4F5B-9B23-5870D5DEEB6A}"
 	ProjectSection(SolutionItems) = preProject
 		.gitignore = .gitignore
+		azure-pipelines-installers.yml = azure-pipelines-installers.yml
 		com.plantanapp.pdfautosigner.plist = com.plantanapp.pdfautosigner.plist
 		mac_install.sh = mac_install.sh
 		mac_uninstall.sh = mac_uninstall.sh
