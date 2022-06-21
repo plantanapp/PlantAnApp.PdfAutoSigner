@@ -48,9 +48,21 @@ builder.Services.AddTransient<ISignaturesProviderService, SignaturesProviderServ
 builder.Services.AddTransient<ISignerService, SignerService>();
 builder.Services.AddControllers();
 
+// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+builder.Services.AddHealthChecks();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+// DO NOT USE HTTPS - It will cause issues regarding missing certificates.
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseAuthorization();
 
@@ -59,5 +71,7 @@ app.UseCors();
 app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 app.MapControllers();
+
+app.MapHealthChecks("/health");
 
 app.Run();
