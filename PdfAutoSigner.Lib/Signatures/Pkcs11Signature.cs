@@ -12,33 +12,21 @@ namespace PdfAutoSigner.Lib.Signatures
     /// </summary>
     public class Pkcs11Signature : IExternalSignatureWithChain, IDisposable
     {
-        IPkcs11Library pkcs11Library;
-        ISlot slot;
+        ISlot? slot;
         ITokenInfo tokenInfo;
-        ISession session;
-        IObjectHandle privateKeyHandle;
+        ISession? session;
+        IObjectHandle? privateKeyHandle;
 
-        string alias;
-        X509Certificate[] chain;
-        string encryptionAlgorithm;
-        string hashAlgorithm;
+        X509Certificate[]? chain;
+        string? encryptionAlgorithm;
+        string? hashAlgorithm;
 
-        public Pkcs11Signature(ISlot slot)
+        public Pkcs11Signature(ISlot slot, String hashAlgorithm)
         {
             this.slot = slot;
             this.tokenInfo = slot.GetTokenInfo();
+            this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(hashAlgorithm));
         }
-
-        // TODO: Might need to rethink this as the flow now is slighlty different than the original class.
-        //[Obsolete]
-        //public Pkcs11Signature(string libraryPath, ulong slotId)
-        //{
-        //    Pkcs11InteropFactories factories = new Pkcs11InteropFactories();
-        //    pkcs11Library = factories.Pkcs11LibraryFactory.LoadPkcs11Library(factories, libraryPath, AppType.MultiThreaded);
-        //    // TODO: Handle case where nothing is found
-        //    slot = pkcs11Library.GetSlotList(SlotsType.WithTokenPresent).Find(slot => slot.SlotId == slotId);
-        //    tokenInfo = slot.GetTokenInfo();
-        //}
 
         public IExternalSignatureWithChain Select(string pin)
         {
@@ -56,7 +44,13 @@ namespace PdfAutoSigner.Lib.Signatures
             certAttributeKeys.Add(CKA.CKA_LABEL);
 
             CloseSession();
+            if (slot == null)
+            {
+                throw new ApplicationException("Signature device's slot cannot be found");
+            }
+
             session = slot.OpenSession(SessionType.ReadWrite);
+            session.Logout();
             session.Login(CKU.CKU_USER, pin);
             ObjectAttributeFactory objectAttributeFactory = new ObjectAttributeFactory();
 
@@ -123,7 +117,6 @@ namespace PdfAutoSigner.Lib.Signatures
                 }
 
                 found = true;
-                this.alias = thisAlias;
                 this.encryptionAlgorithm = encryptionAlgorithm;
                 this.privateKeyHandle = key;
                 this.chain = x509Certificates.ToArray();
@@ -132,7 +125,6 @@ namespace PdfAutoSigner.Lib.Signatures
 
             if (!found)
             {
-                this.alias = null;
                 this.encryptionAlgorithm = null;
                 this.privateKeyHandle = null;
                 this.chain = null;
@@ -145,7 +137,6 @@ namespace PdfAutoSigner.Lib.Signatures
         {
             CloseSession();
             slot = null;
-            pkcs11Library?.Dispose();
         }
 
         private void CloseSession()
@@ -154,6 +145,7 @@ namespace PdfAutoSigner.Lib.Signatures
             {
                 try
                 {
+                    session.Logout();
                     session.Dispose();
                 }
                 finally
@@ -164,7 +156,7 @@ namespace PdfAutoSigner.Lib.Signatures
             }
         }
 
-        public X509Certificate[] GetChain()
+        public X509Certificate[]? GetChain()
         {
             return chain;
         }
@@ -174,20 +166,14 @@ namespace PdfAutoSigner.Lib.Signatures
             return $"{tokenInfo.ManufacturerId} - {tokenInfo.Model} - {tokenInfo.SerialNumber}";
         }
 
-        public string GetEncryptionAlgorithm()
+        public string? GetEncryptionAlgorithm()
         {
             return encryptionAlgorithm;
         }
 
-        public string GetHashAlgorithm()
+        public string? GetHashAlgorithm()
         {
             return hashAlgorithm;
-        }
-
-        public Pkcs11Signature SetHashAlgorithm(String hashAlgorithm)
-        {
-            this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(hashAlgorithm));
-            return this;
         }
 
         public byte[] Sign(byte[] message)

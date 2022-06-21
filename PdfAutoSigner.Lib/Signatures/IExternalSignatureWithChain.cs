@@ -7,7 +7,7 @@ namespace PdfAutoSigner.Lib.Signatures
     {
         // Build an unique name for each signature
         string GetSignatureIdentifyingName();
-        X509Certificate[] GetChain();
+        X509Certificate[]? GetChain();
 
         IExternalSignatureWithChain Select(string pin);
     }

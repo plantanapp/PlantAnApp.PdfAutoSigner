@@ -32,6 +32,11 @@ namespace PdfAutoSigner.Lib.Signatures
         /// to do the signature the only hash guaranteed to exist is SHA-1</param>
         public X509Certificate2Signature(X509Certificate2 certificate, String hashAlgorithm)
         {
+            if (certificate == null)
+            {
+                throw new ArgumentException("Certificate should not be null");
+            }
+
             if (!certificate.HasPrivateKey)
                 throw new ArgumentException("No private key.");
             this.certificate = certificate;

@@ -1,6 +1,6 @@
 ﻿Publish as a self-contained app:
-dotnet publish -c Release --self-contained -r win-x64 -p:PublishTrimmed=true -p:PublishSingleFile=true
-dotnet publish -c Release --self-contained -r osx-x64 -p:PublishTrimmed=true -p:PublishSingleFile=true
+dotnet publish -c Release --self-contained -r win-x64 -p:PublishSingleFile=true
+dotnet publish -c Release --self-contained -r osx-x64 -p:PublishSingleFile=true
 
 Run on mac:
 - pkcs11

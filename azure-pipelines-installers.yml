@@ -85,7 +85,7 @@ jobs:
         inputs:
           command: 'publish'
           projects: '$(buildProject)'
-          arguments: '-c $(buildConfiguration) --self-contained -r osx-$(buildPlatform) -p:PublishTrimmed=true -p:PublishSingleFile=true'
+          arguments: '-c $(buildConfiguration) -r osx-$(buildPlatform) --self-contained -p:PublishSingleFile=true'
           zipAfterPublish: false
           
       - task: CopyFiles@2

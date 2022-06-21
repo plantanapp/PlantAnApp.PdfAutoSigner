@@ -6,7 +6,7 @@
         public const string Pkcs11DevicesConfigPath = $"{TokensConfigPath}:Pkcs11Devices";
         public const string CertificatesConfigPath = $"{TokensConfigPath}:Certificates";
 
-        public List<Pkcs11DeviceData> Pkcs11Devices { get; set; }
-        public List<CertificateData> Certificates { get; set; }
+        public List<Pkcs11DeviceData> Pkcs11Devices { get; set; } = new List<Pkcs11DeviceData>();
+        public List<CertificateData> Certificates { get; set; } = new List<CertificateData>();
     }
 }

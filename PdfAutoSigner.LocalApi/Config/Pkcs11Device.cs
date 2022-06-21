@@ -2,7 +2,7 @@
 {
     public class Pkcs11DeviceData
     {
-        public string Name { get; set; }
-        public List<Pkcs11LibPathData> Pkcs11LibPaths { get; set; }
+        public string? Name { get; set; }
+        public List<Pkcs11LibPathData> Pkcs11LibPaths { get; set; } = new List<Pkcs11LibPathData>();
     }
 }

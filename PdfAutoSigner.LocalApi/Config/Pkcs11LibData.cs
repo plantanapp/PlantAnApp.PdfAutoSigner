@@ -12,6 +12,6 @@ namespace PdfAutoSigner.LocalApi.Config
         [JsonConverter(typeof(StringEnumConverter))]
         public Architecture Architecture { get; set; }
 
-        public string LibPath { get; set; }
+        public string? LibPath { get; set; }
     }
 }

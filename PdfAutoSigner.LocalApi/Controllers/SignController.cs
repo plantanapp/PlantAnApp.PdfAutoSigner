@@ -30,8 +30,7 @@ namespace PdfAutoSigner.LocalApi.Controllers
         public IActionResult Sign([FromForm] IFormFile file, [FromForm] string inputDataJson)
         {
             var inputData = JsonSerializer.Deserialize<SignInputData>(inputDataJson);
-
-            if (string.IsNullOrWhiteSpace(inputData.Pin))
+            if (string.IsNullOrWhiteSpace(inputData?.Pin))
             {
                 return BadRequest("The pin must be specified.");
             }

@@ -73,7 +73,7 @@
     <!-- Clean previous build folder -->
     <Exec Command="rd /s /q ..\PdfAutoSigner.LocalApi\bin\$(Configuration)\net6.0\win-$(Platform)" />
     <!-- Publish app -->
-    <Exec Command="dotnet publish ..\PdfAutoSigner.LocalApi\PdfAutoSigner.LocalApi.csproj -c $(Configuration) --self-contained -r win-$(Platform) -p:PublishTrimmed=true -p:PublishSingleFile=true" />
+    <Exec Command="dotnet publish ..\PdfAutoSigner.LocalApi\PdfAutoSigner.LocalApi.csproj -c $(Configuration) -r win-$(Platform) --self-contained -p:PublishSingleFile=true" />
     <!-- Get assembly version -->
     <GetAssemblyIdentity AssemblyFiles="..\PdfAutoSigner.LocalApi\bin\$(Configuration)\net6.0\win-$(Platform)\PdfAutoSigner.LocalApi.dll">
       <Output TaskParameter="Assemblies" ItemName="AssemblyVersion" />

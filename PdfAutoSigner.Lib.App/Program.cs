@@ -28,14 +28,22 @@ void RunOptions(CommandLineOptions options)
 
     // Create the signature
     var factory = new SignatureFactory();
-    IExternalSignatureWithChain signature = null;
+    IExternalSignatureWithChain? signature = null;
     if (options.UseCertificates)
     {
-        signature = factory.CreateX509Certificate2Signature(options.LibPathOrIssuerName, options.SignatureIdx, pin: pin);
+        var availableSignatures = factory.GetAvailableX509Certificate2Signatures(new List<string> { options.LibPathOrIssuerName });
+        signature = availableSignatures?.ElementAt((int)options.SignatureIdx);
     }
     else
     {
-        signature = factory.CreatePkcs11Signature(options.LibPathOrIssuerName, options.SignatureIdx, pin: pin);
+        var availableSignatures = factory.GetAvailablePkcs11Signatures(new List<string> { options.LibPathOrIssuerName });
+        signature = availableSignatures?.ElementAt((int)options.SignatureIdx);
+    }
+
+    signature = signature?.Select(pin);
+    if (signature == null)
+    {
+        throw new ApplicationException("Could not get the correct signature");
     }
 
     IDocAutoSigner docSigner = new PdfDocAutoSigner();
