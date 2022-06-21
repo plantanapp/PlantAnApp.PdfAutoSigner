@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.Xunit2;
 using Moq;
+using Net.Pkcs11Interop.HighLevelAPI;
 using PdfAutoSigner.Lib.Signatures;
 using PdfAutoSigner.LocalApi.Services;
 
@@ -13,7 +14,8 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
         public void GetAvailableSignatures_ReturnsPkcs11AndCertSignatures([Frozen] Mock<ISignatureFactory> signatureFactoryMock, 
             SignaturesProviderService signaturesProviderService, Fixture fixture)
         {
-            var pkcs11Signatures = fixture.CreateMany<Pkcs11Signature>(5).ToList();
+            var iSlot = fixture.Create<ISlot>();
+            var pkcs11Signatures = Enumerable.Repeat(1, 5).Select(_ => new Pkcs11Signature(iSlot, SignatureFactory.Pkcs11HashAlgorithm)).ToList();
             var cert = X509CertificateFactory.CreateRsaCertificate();
             var certSignatures = Enumerable.Repeat(1, 3).Select(_ => new X509Certificate2Signature(cert, SignatureFactory.X509CertHashAlgorithm)).ToList();
             signatureFactoryMock.Setup(f => f.GetAvailablePkcs11Signatures(It.IsAny<List<string>>())).Returns(pkcs11Signatures);

@@ -35,8 +35,8 @@ namespace PdfAutoSigner.LocalApi.Tests.Controllers
             var result = signController.GetAvailableSignatures();
 
             var okResult = result.Result as OkObjectResult;
-            var signatures = okResult.Value as List<string>;
-            Assert.Equal(2, signatures.Count);
+            var signatures = okResult?.Value as List<string>;
+            Assert.Equal(2, signatures?.Count);
             Assert.Contains("Sign1", signatures);
             Assert.Contains("Sign2", signatures);
         }
@@ -78,7 +78,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Controllers
             var inputData = new SignInputData { Pin = "123456", SignatureName = "Sign1" };
             var inputDataJson = JsonSerializer.Serialize(inputData);
 
-            Stream inputStream = null;
+            Stream? inputStream = null;
             formFileMock.Setup(f => f.CopyTo(It.IsAny<Stream>())).Callback<Stream>(s => inputStream = s);
 
             var result = signController.Sign(formFileMock.Object, inputDataJson);

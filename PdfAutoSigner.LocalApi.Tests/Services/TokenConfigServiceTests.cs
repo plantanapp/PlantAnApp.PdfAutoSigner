@@ -1,37 +1,16 @@
 ﻿using AutoFixture;
 using AutoFixture.Xunit2;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Moq;
-using Newtonsoft.Json;
 using PdfAutoSigner.LocalApi.Config;
 using PdfAutoSigner.LocalApi.Helpers;
 using PdfAutoSigner.LocalApi.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PdfAutoSigner.LocalApi.Tests.Services
 {
     public class TokenConfigServiceTests
     {
-        [Theory]
-        [AutoDomainData]
-        public void GetPkcs11LibPathsByOS_MissingPkcs11Section_ThrowException(
-            [Frozen] Mock<IConfiguration> configurationMock, [Frozen] Mock<IConfigurationSection> pkcs11ConfigurationSectionMock,
-            TokenConfigService tokenConfigService, Fixture fixture)
-        {
-            pkcs11ConfigurationSectionMock.Setup(s => s.Value).Returns<List<Pkcs11DeviceData>>(null);
-            configurationMock.Setup(c => c.GetSection(TokenOptions.Pkcs11DevicesConfigPath)).Returns(pkcs11ConfigurationSectionMock.Object);
-
-            Action act = () => tokenConfigService.GetPkcs11LibPathsByOS();
-
-            Assert.Throws<FormatException>(act);
-        }
-
         [Theory]
         [AutoDomainData]
         public void GetPkcs11LibPathsByOS_UnsupportedOS_ThrowException(
@@ -76,20 +55,6 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
             Assert.Equal(3, libPaths.Count);
             var expectedPaths = win64Pkcs11LibData.Select(pld => pld.LibPath);
             Assert.Equal(expectedPaths.OrderBy(p => p), libPaths.OrderBy(p => p));
-        }
-
-        [Theory]
-        [AutoDomainData]
-        public void GetIssuerNames_MissingIssuerNamesSection_ThrowException(
-            [Frozen] Mock<IConfiguration> configurationMock, [Frozen] Mock<IConfigurationSection> certIssuerNamesConfigurationSectionMock,
-            TokenConfigService tokenConfigService, Fixture fixture)
-        {
-            certIssuerNamesConfigurationSectionMock.Setup(s => s.Value).Returns<List<Pkcs11DeviceData>>(null);
-            configurationMock.Setup(c => c.GetSection(TokenOptions.CertificatesConfigPath)).Returns(certIssuerNamesConfigurationSectionMock.Object);
-
-            Action act = () => tokenConfigService.GetIssuerNames();
-
-            Assert.Throws<FormatException>(act);
         }
 
         [Theory]

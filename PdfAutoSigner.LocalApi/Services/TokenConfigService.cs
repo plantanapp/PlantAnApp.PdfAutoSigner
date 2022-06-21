@@ -20,10 +20,6 @@ namespace PdfAutoSigner.LocalApi.Services
         public List<string> GetPkcs11LibPathsByOS()
         {
             var deviceDataList = tokenOptionsSnapshot.Value.Pkcs11Devices;
-            if (deviceDataList == null)
-            {
-                throw new FormatException($"Could not parse the section {TokenOptions.Pkcs11DevicesConfigPath} in the token settings json file."); 
-            }
 
             var os = osHelper.GetOS();
             if (os == null)
@@ -45,10 +41,6 @@ namespace PdfAutoSigner.LocalApi.Services
         public List<string> GetIssuerNames()
         {
             var certificateDataList = tokenOptionsSnapshot.Value.Certificates;
-            if (certificateDataList == null)
-            {
-                throw new FormatException($"Could not parse the section {TokenOptions.CertificatesConfigPath} in token settings json file.");
-            }
 
             var certificateIssuerNames =
                 from certificateData in certificateDataList
