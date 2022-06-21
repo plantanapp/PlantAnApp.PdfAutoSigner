@@ -11,3 +11,4 @@
 **/hello-signed-cert.pdf
 PdfAutoSigner.LocalApi.Installer/Installs/**
 PdfAutoSigner.LocalApi.Installer/ComponentsGenerated.wxs
+/PdfAutoSigner.LocalApi.Installer/ComponentsGenerated.wxs
