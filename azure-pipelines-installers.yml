@@ -34,17 +34,12 @@ jobs:
           configuration: '$(buildConfiguration)'
           clean: true
 
-      - task: VSBuild@1
+      - task: DotNetCoreCLI@2
+        displayName: Test
         inputs:
-          solution: '**\*.Tests.csproj'
-          platform: '$(buildPlatform)'
-          configuration: '$(buildConfiguration)'
-          clean: true
-
-      - task: VSTest@2
-        inputs:
-          platform: '$(buildPlatform)'
-          configuration: '$(buildConfiguration)'
+          command: test
+          projects: '**/*[Tt]ests/*.csproj'
+          arguments: '--configuration $(buildConfiguration)'
 
       - task: CopyFiles@2
         inputs:
