@@ -15,9 +15,9 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
             SignaturesProviderService signaturesProviderService, Fixture fixture)
         {
             var iSlot = fixture.Create<ISlot>();
-            var pkcs11Signatures = Enumerable.Repeat(1, 5).Select(_ => new Pkcs11Signature(iSlot, SignatureFactory.Pkcs11HashAlgorithm)).ToList();
+            var pkcs11Signatures = Enumerable.Repeat(1, 5).Select(_ => new Pkcs11Signature(iSlot)).ToList();
             var cert = X509CertificateFactory.CreateRsaCertificate();
-            var certSignatures = Enumerable.Repeat(1, 3).Select(_ => new X509Certificate2Signature(cert, SignatureFactory.X509CertHashAlgorithm)).ToList();
+            var certSignatures = Enumerable.Repeat(1, 3).Select(_ => new X509Certificate2Signature(cert)).ToList();
             signatureFactoryMock.Setup(f => f.GetAvailablePkcs11Signatures(It.IsAny<List<string>>())).Returns(pkcs11Signatures);
             signatureFactoryMock.Setup(f => f.GetAvailableX509Certificate2Signatures(It.IsAny<List<string>>())).Returns(certSignatures);
 

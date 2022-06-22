@@ -13,6 +13,10 @@ namespace PdfAutoSigner.Lib.Signatures
     /// </summary>
     public class X509Certificate2Signature: IExternalSignatureWithChain
     {
+        // For now only SHA256 is supported.
+        // public static readonly string X509CertHashAlgorithm = "SHA256";
+        private static readonly HashAlgorithmName X509CertHashAlgorithmName = HashAlgorithmName.SHA256;
+
         /// <summary>
         /// The certificate with the private key
         /// </summary>
@@ -31,7 +35,7 @@ namespace PdfAutoSigner.Lib.Signatures
         /// <param name="certificate">The certificate with the private key</param>
         /// <param name="hashAlgorithm">The hash algorithm for the signature. As the Windows CAPI is used
         /// to do the signature the only hash guaranteed to exist is SHA-1</param>
-        public X509Certificate2Signature(X509Certificate2 certificate, String hashAlgorithm)
+        public X509Certificate2Signature(X509Certificate2 certificate)
         {
             if (certificate == null)
             {
@@ -41,7 +45,7 @@ namespace PdfAutoSigner.Lib.Signatures
             if (!certificate.HasPrivateKey)
                 throw new ArgumentException("No private key.");
             this.certificate = certificate;
-            this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(hashAlgorithm));
+            this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(X509CertHashAlgorithmName.Name));
             var privateKey = certificate.GetPrivateKey();
             if (privateKey is RSA)
             {
@@ -133,7 +137,7 @@ namespace PdfAutoSigner.Lib.Signatures
 
             if (privateKey is RSA rsa)
             {
-                return rsa.SignData(message, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+                return rsa.SignData(message, X509CertHashAlgorithmName, RSASignaturePadding.Pkcs1);
             }
             //else if (privateKey is RSACng)
             //{
@@ -142,7 +146,7 @@ namespace PdfAutoSigner.Lib.Signatures
             //}
             else if (privateKey is DSA dsa)
             {
-                return dsa.SignData(message, HashAlgorithmName.SHA256);
+                return dsa.SignData(message, X509CertHashAlgorithmName);
             }
 
             return Array.Empty<byte>();

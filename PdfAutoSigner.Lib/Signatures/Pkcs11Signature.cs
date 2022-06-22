@@ -12,6 +12,9 @@ namespace PdfAutoSigner.Lib.Signatures
     /// </summary>
     public class Pkcs11Signature : IExternalSignatureWithChain, IDisposable
     {
+        // For now only SHA256 is supported.
+        public static readonly string Pkcs11HashAlgorithm = "SHA256";
+
         ISlot? slot;
         ITokenInfo tokenInfo;
         ISession? session;
@@ -21,11 +24,11 @@ namespace PdfAutoSigner.Lib.Signatures
         string? encryptionAlgorithm;
         string? hashAlgorithm;
 
-        public Pkcs11Signature(ISlot slot, String hashAlgorithm)
+        public Pkcs11Signature(ISlot slot)
         {
             this.slot = slot;
             this.tokenInfo = slot.GetTokenInfo();
-            this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(hashAlgorithm));
+            this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(Pkcs11HashAlgorithm));
         }
 
         public IExternalSignatureWithChain Select(string pin)

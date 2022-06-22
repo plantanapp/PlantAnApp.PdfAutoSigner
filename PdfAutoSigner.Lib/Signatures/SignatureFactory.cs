@@ -8,9 +8,8 @@ namespace PdfAutoSigner.Lib.Signatures
 {
     public class SignatureFactory : ISignatureFactory
     {
-        // For now only SHA256 is supported.
-        public static readonly string Pkcs11HashAlgorithm = "SHA256";
-        public static readonly string X509CertHashAlgorithm = "SHA-256";
+        
+        
 
         private readonly ILogger<SignatureFactory> logger;
 
@@ -56,7 +55,7 @@ namespace PdfAutoSigner.Lib.Signatures
                 foreach (var slot in slots ?? new List<ISlot>())
                 {
                     logger.LogInformation($"Found token using library {libraryPath} on slot {slot.SlotId}");
-                    var pkcs11Signature = new Pkcs11Signature(slot, Pkcs11HashAlgorithm);
+                    var pkcs11Signature = new Pkcs11Signature(slot);
                     pkcs11Signatures.Add(pkcs11Signature);
                 }
             }
@@ -76,7 +75,7 @@ namespace PdfAutoSigner.Lib.Signatures
                 foreach (var cert in certificates)
                 {
                     logger.LogInformation($"Found certificate {cert.FriendlyName} for issuer {issuerNames}");
-                    var x509Certificate2Signature = new X509Certificate2Signature(cert, X509CertHashAlgorithm);
+                    var x509Certificate2Signature = new X509Certificate2Signature(cert);
                     x509Certificate2Signatures.Add(x509Certificate2Signature);
                 }
             }
