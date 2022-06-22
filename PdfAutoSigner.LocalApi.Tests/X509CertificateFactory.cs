@@ -15,8 +15,9 @@ namespace PdfAutoSigner.LocalApi.Tests
 
         public static X509Certificate2 CreateRsaCertificate()
         {
-            var rsa = RSA.Create();// generate asymmetric key pair
-            var req = new CertificateRequest("cn=testcert", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            var rsaCng = RSACng.Create();
+            // var rsa = RSA.Create();// generate asymmetric key pair
+            var req = new CertificateRequest("cn=testcert", rsaCng, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             var cert = req.CreateSelfSigned(DateTimeOffset.Now, DateTimeOffset.Now.AddYears(5));
 
             // use cert2.GetECDsaPrivateKey() to get the private key

@@ -50,7 +50,19 @@ namespace PdfAutoSigner.Lib.Signatures
             }
 
             session = slot.OpenSession(SessionType.ReadWrite);
-            session.Logout();
+            var sessionInfo = session.GetSessionInfo();
+            
+            try
+            {
+                // Try to logout the user if it was already logged in
+                if (sessionInfo.State != CKS.CKS_RO_PUBLIC_SESSION && sessionInfo.State != CKS.CKS_RW_PUBLIC_SESSION)
+                    session.Logout();
+            }
+            catch (Exception)
+            {
+                // Continue
+            }
+            
             session.Login(CKU.CKU_USER, pin);
             ObjectAttributeFactory objectAttributeFactory = new ObjectAttributeFactory();
 

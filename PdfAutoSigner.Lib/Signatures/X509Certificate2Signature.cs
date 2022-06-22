@@ -4,6 +4,7 @@ using System.Net;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
+using PdfAutoSigner.Lib.Signatures;
 
 namespace PdfAutoSigner.Lib.Signatures
 {
@@ -41,22 +42,21 @@ namespace PdfAutoSigner.Lib.Signatures
                 throw new ArgumentException("No private key.");
             this.certificate = certificate;
             this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(hashAlgorithm));
-            Console.WriteLine($"Typeof: {certificate.PrivateKey.GetType()}");
-            Console.WriteLine($"PrivateKey: {certificate.PrivateKey}");
-            if (certificate.PrivateKey is RSACryptoServiceProvider)
+            var privateKey = certificate.GetPrivateKey();
+            if (privateKey is RSA)
             {
                 encryptionAlgorithm = "RSA";
             }
-            else if (certificate.PrivateKey is RSACng)
+            else if (privateKey is RSACng)
             {
                 encryptionAlgorithm = "RSA";
             }
-            else if (certificate.PrivateKey is DSACryptoServiceProvider)
+            else if (privateKey is DSA)
             {
                 encryptionAlgorithm = "DSA";
             }
             else
-                throw new ArgumentException("Unknown encryption algorithm " + certificate.PrivateKey);
+                throw new ArgumentException("Unknown encryption algorithm " + privateKey);
         }
 
         public IExternalSignatureWithChain Select(string pin)
@@ -69,8 +69,9 @@ namespace PdfAutoSigner.Lib.Signatures
 
         private X509Certificate2Signature SetPin(string pin)
         {
+            var privateKey = certificate.GetPrivateKey();
             // For RSA and DSA
-            if (certificate.PrivateKey is ICspAsymmetricAlgorithm)
+            if (privateKey is ICspAsymmetricAlgorithm)
             {
                 var cspAsymAlg = (ICspAsymmetricAlgorithm)certificate.PrivateKey;
                 CspParameters cspParameters =
@@ -85,17 +86,19 @@ namespace PdfAutoSigner.Lib.Signatures
                     };
 
                 // set modified RSA crypto provider back
-                if (certificate.PrivateKey is RSACryptoServiceProvider)
+                if (privateKey is RSACryptoServiceProvider)
                 {
-                    certificate.PrivateKey = new RSACryptoServiceProvider(cspParameters);
+                    var newPrivateKey = new RSACryptoServiceProvider(cspParameters);
+                    certificate = certificate.CopyWithPrivateKey(newPrivateKey);
                 }
-                else if (certificate.PrivateKey is DSACryptoServiceProvider)
+                else if (privateKey is DSACryptoServiceProvider)
                 {
-                    certificate.PrivateKey = new DSACryptoServiceProvider(cspParameters);
+                    var newPrivateKey = new DSACryptoServiceProvider(cspParameters);
+                    certificate = certificate.CopyWithPrivateKey(newPrivateKey);
                 }
             }
             // Different approach is needed for RSACng
-            else if (certificate.PrivateKey is RSACng rsaCng)
+            else if (privateKey is RSACng rsaCng)
             {
                 // Set the PIN, an explicit null terminator is required to this Unicode/UCS-2 string.
 
@@ -126,21 +129,23 @@ namespace PdfAutoSigner.Lib.Signatures
 
         public virtual byte[] Sign(byte[] message)
         {
-            if (certificate.PrivateKey is RSACryptoServiceProvider)
+            var privateKey = certificate.GetPrivateKey();
+
+            if (privateKey is RSA rsa)
             {
-                RSACryptoServiceProvider rsa = (RSACryptoServiceProvider)certificate.PrivateKey;
-                return rsa.SignData(message, hashAlgorithm);
-            }
-            else if (certificate.PrivateKey is RSACng)
-            {
-                RSACng rsa = (RSACng)certificate.PrivateKey;
                 return rsa.SignData(message, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             }
-            else
+            //else if (privateKey is RSACng)
+            //{
+            //    RSACng rsa = (RSACng)certificate.PrivateKey;
+            //    return rsa.SignData(message, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
+            //}
+            else if (privateKey is DSA dsa)
             {
-                DSACryptoServiceProvider dsa = (DSACryptoServiceProvider)certificate.PrivateKey;
-                return dsa.SignData(message);
+                return dsa.SignData(message, HashAlgorithmName.SHA256);
             }
+
+            return Array.Empty<byte>();
         }
 
         public Org.BouncyCastle.X509.X509Certificate[] GetChain()
