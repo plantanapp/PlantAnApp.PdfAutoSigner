@@ -41,6 +41,8 @@ namespace PdfAutoSigner.Lib.Signatures
                 throw new ArgumentException("No private key.");
             this.certificate = certificate;
             this.hashAlgorithm = DigestAlgorithms.GetDigest(DigestAlgorithms.GetAllowedDigest(hashAlgorithm));
+            Console.WriteLine($"Typeof: {certificate.PrivateKey.GetType()}");
+            Console.WriteLine($"PrivateKey: {certificate.PrivateKey}");
             if (certificate.PrivateKey is RSACryptoServiceProvider)
             {
                 encryptionAlgorithm = "RSA";
