@@ -1,4 +1,14 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿// PdfAutoSigner signs PDF files automatically using a hardware security module. 
+// Copyright (C) Plant An App
+//  
+// This program is free software: you can redistribute it and/or modify 
+// it under the terms of the GNU Affero General Public License as 
+// published by the Free Software Foundation, either version 3 of the 
+// License, or (at your option) any later version. 
+//  
+// This program is distributed in the hope that it will be useful, 
+// but WITHOUT ANY WARRANTY
+
 using CommandLine;
 using iText.Kernel.Geom;
 using Microsoft.Extensions.Logging;
