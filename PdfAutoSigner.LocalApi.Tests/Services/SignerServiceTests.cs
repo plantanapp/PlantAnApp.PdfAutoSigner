@@ -1,5 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.Xunit2;
+using iText.Kernel.Pdf;
+using iText.Signatures;
 using Moq;
 using PdfAutoSigner.Lib.Signatures;
 using PdfAutoSigner.Lib.Signers;
@@ -79,6 +81,41 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
             signerService.Sign(inputStream, SignatureIdentifyingName, Pin);
 
             signerMock.Verify(s => s.Sign(inputStream, signatureMock.Object,  It.IsAny<SignatureAppearanceDetails>()), Times.Once());
+        }
+
+        [Theory]
+        [AutoDomainData]
+        public void Sign_SignActualPdf_ReturnsSignedStreamWithOneSignature([Frozen] Mock<ISignaturesProviderService> signaturesProviderServiceMock,
+            //SignerService signerService, 
+            Fixture fixture)
+        {
+            string? password = null;
+            var cert = X509CertificateFactory.CreateRsaCertificate(password);
+            var certSignatures = new List<IExternalSignatureWithChain> { new X509Certificate2Signature(cert) };
+            var signatureName = certSignatures[0].GetSignatureIdentifyingName();
+            signaturesProviderServiceMock.Setup(p => p.GetAvailableSignatures()).Returns(certSignatures);
+            var docService = new PdfDocAutoSigner();
+            var signerService = new SignerService(signaturesProviderServiceMock.Object, docService);
+
+            using MemoryStream inputStream = new MemoryStream();
+            ReadFile("hello.pdf", inputStream);
+
+            var outputStream = signerService.Sign(inputStream, signatureName, password);
+
+            using var reader = new PdfReader(outputStream);
+            using var doc = new PdfDocument(reader);
+            var signUtil = new SignatureUtil(doc);
+            var names = signUtil.GetSignatureNames();
+            
+            Assert.Equal(1, names.Count);
+        }
+
+        private void ReadFile(string fileName, MemoryStream ms)
+        {
+            string path = Path.Combine(Environment.CurrentDirectory, @"Files\", fileName);
+            using (var file = new FileStream(path, FileMode.Open, FileAccess.Read))
+            file.CopyTo(ms);
+            ms.Seek(0, SeekOrigin.Begin);
         }
     }
 }

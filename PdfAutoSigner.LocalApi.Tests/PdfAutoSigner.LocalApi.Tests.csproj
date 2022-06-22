@@ -28,4 +28,10 @@
     <ProjectReference Include="..\PdfAutoSigner.LocalApi\PdfAutoSigner.LocalApi.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Files\hello.pdf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

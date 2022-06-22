@@ -68,7 +68,12 @@ namespace PdfAutoSigner.Lib.Signatures
             X509CertificateParser objCP = new X509CertificateParser();
             chain = new Org.BouncyCastle.X509.X509Certificate[] { objCP.ReadCertificate(certificate.RawData) };
 
-            return SetPin(pin);
+            if (!string.IsNullOrWhiteSpace(pin))
+            {
+                SetPin(pin);
+            }
+
+            return this;
         }
 
         private X509Certificate2Signature SetPin(string pin)
