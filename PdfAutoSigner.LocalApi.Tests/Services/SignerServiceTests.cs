@@ -112,7 +112,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
 
         private void ReadFile(string fileName, MemoryStream ms)
         {
-            string path = Path.Combine(Environment.CurrentDirectory, @"Files\", fileName);
+            string path = Path.Combine(Environment.CurrentDirectory, @"Files", fileName);
             using (var file = new FileStream(path, FileMode.Open, FileAccess.Read))
             file.CopyTo(ms);
             ms.Seek(0, SeekOrigin.Begin);
