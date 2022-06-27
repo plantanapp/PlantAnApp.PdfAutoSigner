@@ -35,18 +35,13 @@ builder.Configuration.AddJsonFile("tokensettings.json", optional: true);
 builder.Logging.AddLog4Net();
 
 // Enable CORS
-var allowedOrigins = builder.Configuration["AllowedOrigins"];
-if (!String.IsNullOrEmpty(allowedOrigins))
+builder.Services.AddCors(options =>
 {
-    var origins = allowedOrigins.Split(";");
-    builder.Services.AddCors(options =>
+    options.AddDefaultPolicy(policy =>
     {
-        options.AddDefaultPolicy(policy =>
-        {
-            policy.WithOrigins(origins).AllowAnyMethod().AllowAnyHeader();
-        });
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
-}
+});
 
 // Add services to the container.
 builder.Services.Configure<TokenOptions>(builder.Configuration.GetSection(TokenOptions.TokensConfigPath));
