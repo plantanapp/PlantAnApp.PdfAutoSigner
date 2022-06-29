@@ -16,16 +16,26 @@ using PdfAutoSigner.LocalApi.Config;
 using PdfAutoSigner.LocalApi.Helpers;
 using PdfAutoSigner.LocalApi.Middlewares;
 using PdfAutoSigner.LocalApi.Services;
+using System.Diagnostics;
+using System.Reflection;
 
+//var options = new WebApplicationOptions
+//{
+//    Args = args,
+//    ContentRootPath = WindowsServiceHelpers.IsWindowsService() ? AppContext.BaseDirectory : default
+//};
+//var builder = WebApplication.CreateBuilder(options);
+using var processModule = Process.GetCurrentProcess().MainModule;
 var options = new WebApplicationOptions
 {
     Args = args,
-    ContentRootPath = WindowsServiceHelpers.IsWindowsService() ? AppContext.BaseDirectory : default
+    //ContentRootPath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+    ContentRootPath = Path.GetDirectoryName(processModule?.FileName)
 };
 var builder = WebApplication.CreateBuilder(options);
 
 // Add support to be able to run as Windows service or Linux \ Mac daemon
-builder.Host.UseWindowsService().UseSystemd();
+//builder.Host.UseWindowsService().UseSystemd();
 
 // Add configuration settings
 builder.Configuration.AddJsonFile("hostsettings.json", optional: true);

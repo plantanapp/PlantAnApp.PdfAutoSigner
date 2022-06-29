@@ -38,7 +38,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.md" />
-    <Content Include="RemoveExeComponentsTransform.xslt" />
+    <!-- <Content Include="RemoveExeComponentsTransform.xslt" /> -->
     <Content Include="resources\license.rtf" />
   </ItemGroup>
   <ItemGroup>
@@ -83,7 +83,8 @@
       <RunWixToolsOutOfProc Condition=" '$(PROCESSOR_ARCHITECTURE)'!='x86' ">true</RunWixToolsOutOfProc>
     </PropertyGroup>
     <!-- Harvest file components from publish folder -->
-    <HeatDirectory OutputFile="ComponentsGenerated.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" Directory="..\PdfAutoSigner.LocalApi\bin\$(Configuration)\net6.0\win-$(Platform)\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" Transforms="RemoveExeComponentsTransform.xslt" RunAsSeparateProcess="$(RunWixToolsOutOfProc)" />
+	<HeatDirectory OutputFile="ComponentsGenerated.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" Directory="..\PdfAutoSigner.LocalApi\bin\$(Configuration)\net6.0\win-$(Platform)\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" RunAsSeparateProcess="$(RunWixToolsOutOfProc)" />
+    <!-- <HeatDirectory OutputFile="ComponentsGenerated.wxs" DirectoryRefId="INSTALLFOLDER" ComponentGroupName="PublishedComponents" SuppressCom="true" Directory="..\PdfAutoSigner.LocalApi\bin\$(Configuration)\net6.0\win-$(Platform)\publish" SuppressFragments="true" SuppressRegistry="true" SuppressRootDirectory="true" AutoGenerateGuids="false" GenerateGuidsNow="true" ToolPath="$(WixToolPath)" PreprocessorVariable="var.BasePath" Transforms="RemoveExeComponentsTransform.xslt" RunAsSeparateProcess="$(RunWixToolsOutOfProc)" /> -->
   </Target>
   <!-- <Target Name="AfterBuild"> -->
     <!-- Get assembly version -->
