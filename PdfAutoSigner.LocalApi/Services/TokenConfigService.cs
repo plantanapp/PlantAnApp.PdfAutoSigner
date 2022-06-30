@@ -21,16 +21,19 @@ namespace PdfAutoSigner.LocalApi.Services
     {
         private readonly IOptionsSnapshot<TokenOptions> tokenOptionsSnapshot;
         private readonly IOSHelper osHelper;
+        private readonly ILogger<TokenConfigService> logger;
 
-        public TokenConfigService(IOptionsSnapshot<TokenOptions> tokenOptionsSnapshot, IOSHelper osHelper)
+        public TokenConfigService(IOptionsSnapshot<TokenOptions> tokenOptionsSnapshot, IOSHelper osHelper, ILogger<TokenConfigService> logger)
         {
             this.tokenOptionsSnapshot = tokenOptionsSnapshot;
             this.osHelper = osHelper;
+            this.logger = logger;
         }
 
         public List<string> GetPkcs11LibPathsByOS()
         {
             var deviceDataList = tokenOptionsSnapshot.Value.Pkcs11Devices;
+            logger.LogInformation($"Found {deviceDataList.Count} pkcs11 devices in config file.");
 
             var os = osHelper.GetOS();
             if (os == null)
@@ -46,16 +49,21 @@ namespace PdfAutoSigner.LocalApi.Services
                 where osLibPath.OS == os && osLibPath.Architecture == architecture
                 select osLibPath.LibPath;
 
+            logger.LogInformation($"Found following library paths for current os and architecture in the config file: {string.Join("", libPaths)}");
+
             return libPaths.ToList();
         }
 
         public List<string> GetIssuerNames()
         {
             var certificateDataList = tokenOptionsSnapshot.Value.Certificates;
+            logger.LogInformation($"Found {certificateDataList.Count} certificates in config file.");
 
             var certificateIssuerNames =
                 from certificateData in certificateDataList
                 select certificateData.CertificateIssuerName;
+
+            logger.LogInformation($"Found following certificates in the config file: {string.Join("", certificateIssuerNames)}");
 
             return certificateIssuerNames.ToList();
         }

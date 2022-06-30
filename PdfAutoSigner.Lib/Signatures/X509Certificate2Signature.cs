@@ -37,7 +37,7 @@ namespace PdfAutoSigner.Lib.Signatures
         /** The encryption algorithm (obtained from the private key) */
         private String encryptionAlgorithm;
 
-        private Org.BouncyCastle.X509.X509Certificate[] chain;
+        private Org.BouncyCastle.X509.X509Certificate[]? chain;
 
         /// <summary>
         /// Creates a signature using a X509Certificate2. It supports smartcards without 
@@ -91,9 +91,9 @@ namespace PdfAutoSigner.Lib.Signatures
         {
             var privateKey = certificate.GetPrivateKey();
             // For RSA and DSA
-            if (privateKey is ICspAsymmetricAlgorithm)
+            if (privateKey is ICspAsymmetricAlgorithm cspAsymAlg)
             {
-                var cspAsymAlg = (ICspAsymmetricAlgorithm)certificate.PrivateKey;
+                //var cspAsymAlg = (ICspAsymmetricAlgorithm)privateKey;
                 CspParameters cspParameters =
                     new CspParameters
                     {
@@ -168,7 +168,7 @@ namespace PdfAutoSigner.Lib.Signatures
             return Array.Empty<byte>();
         }
 
-        public Org.BouncyCastle.X509.X509Certificate[] GetChain()
+        public Org.BouncyCastle.X509.X509Certificate[]? GetChain()
         {
             return chain;
         }

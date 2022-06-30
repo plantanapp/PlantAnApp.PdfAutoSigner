@@ -56,7 +56,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Controllers
         [AutoDomainData]
         public void Sign_MissingPin_ReturnsBadRequest(
             [Frozen] Mock<IFormFile> formFileMock, 
-            [NoAutoProperties] SignController signController, Fixture fixture)
+            [NoAutoProperties] SignController signController)
         {
             var inputData = new SignInputData { Pin = "" };
             var inputDataJson = JsonSerializer.Serialize(inputData);
@@ -70,7 +70,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Controllers
         [AutoDomainData]
         public void Sign_MissingSignature_ReturnsBadRequest(
             [Frozen] Mock<IFormFile> formFileMock,
-            [NoAutoProperties] SignController signController, Fixture fixture)
+            [NoAutoProperties] SignController signController)
         {
             var inputData = new SignInputData { SignatureName = "" };
             var inputDataJson = JsonSerializer.Serialize(inputData);
@@ -84,7 +84,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Controllers
         [AutoDomainData]
         public void Sign_CallsSignWithCorrectParameters(
             [Frozen] Mock<IFormFile> formFileMock, [Frozen] Mock<ISignerService> signerServiceMock,
-            [NoAutoProperties] SignController signController, Fixture fixture)
+            [NoAutoProperties] SignController signController)
         {
             var inputData = new SignInputData { Pin = "123456", SignatureName = "Sign1" };
             var inputDataJson = JsonSerializer.Serialize(inputData);
@@ -94,7 +94,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Controllers
 
             var result = signController.Sign(formFileMock.Object, inputDataJson);
 
-            signerServiceMock.Verify(s => s.Sign(inputStream, "Sign1", "123456"));
+            signerServiceMock.Verify(s => s.Sign(inputStream!, "Sign1", "123456"));
         }
 
         [Theory]
@@ -102,7 +102,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Controllers
         public void Sign_ReturnsResultFromSign(
             SignInputData signInputData, Mock<MemoryStream> outputMemStreamMock,
             [Frozen] Mock<IFormFile> formFileMock, [Frozen] Mock<ISignerService> signerServiceMock,
-            [NoAutoProperties] SignController signController, Fixture fixture)
+            [NoAutoProperties] SignController signController)
         {
             var inputDataJson = JsonSerializer.Serialize(signInputData);
             byte[] signedByteArr = Encoding.ASCII.GetBytes("test result");
@@ -112,7 +112,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Controllers
             var result = signController.Sign(formFileMock.Object, inputDataJson);
             
             var fileContentResult = result as FileContentResult;
-            Assert.Equal(signedByteArr, fileContentResult.FileContents);
+            Assert.Equal(signedByteArr, fileContentResult!.FileContents);
             Assert.Equal(System.Net.Mime.MediaTypeNames.Application.Octet, fileContentResult.ContentType);
         }
     }

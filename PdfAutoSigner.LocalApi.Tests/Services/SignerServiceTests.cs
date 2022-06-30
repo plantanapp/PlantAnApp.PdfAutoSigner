@@ -96,11 +96,9 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
 
         [Theory]
         [AutoDomainData]
-        public void Sign_SignActualPdf_ReturnsSignedStreamWithOneSignature([Frozen] Mock<ISignaturesProviderService> signaturesProviderServiceMock,
-            //SignerService signerService, 
-            Fixture fixture)
+        public void Sign_SignActualPdf_ReturnsSignedStreamWithOneSignature([Frozen] Mock<ISignaturesProviderService> signaturesProviderServiceMock)
         {
-            string? password = null;
+            string password = "pass";
             var cert = X509CertificateFactory.CreateRsaCertificate(password);
             var certSignatures = new List<IExternalSignatureWithChain> { new X509Certificate2Signature(cert) };
             var signatureName = certSignatures[0].GetSignatureIdentifyingName();

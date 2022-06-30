@@ -2,6 +2,8 @@
 
 Install the WIX Toolset and the Wix Extension for Visual Studio from https://wixtoolset.org/
 
+The client has to run the msi as an administrator.
+
 Change the two ProductCode entries each time you change the version of the application. Never change the UpgradeCode.
 
 The project has some before sections to run customized scripts: in order to see it the project has to be edited in an editor.

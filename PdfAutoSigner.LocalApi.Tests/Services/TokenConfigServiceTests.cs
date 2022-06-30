@@ -72,7 +72,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
         [AutoDomainData]
         public void GetIssuerNames_ReturnCertIssuerNames(
             [Frozen] Mock<IOptionsSnapshot<TokenOptions>> tokenOptionsSnapshotMock,
-            [Frozen] Mock<IOSHelper> osHelperMock, TokenConfigService tokenConfigService, Fixture fixture)
+            TokenConfigService tokenConfigService, Fixture fixture)
         {
             var certData1 = fixture.Build<CertificateData>().With(c => c.CertificateIssuerName, "Issuer1").Create();
             var certData2 = fixture.Build<CertificateData>().With(c => c.CertificateIssuerName, "Issuer2").Create();

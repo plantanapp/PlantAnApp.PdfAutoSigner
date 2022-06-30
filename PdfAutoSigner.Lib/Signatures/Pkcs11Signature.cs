@@ -57,6 +57,7 @@ namespace PdfAutoSigner.Lib.Signatures
             certAttributeKeys.Add(CKA.CKA_VALUE);
             certAttributeKeys.Add(CKA.CKA_LABEL);
 
+
             CloseSession();
             if (slot == null)
             {
@@ -76,7 +77,7 @@ namespace PdfAutoSigner.Lib.Signatures
             {
                 // Continue
             }
-            
+
             session.Login(CKU.CKU_USER, pin);
             ObjectAttributeFactory objectAttributeFactory = new ObjectAttributeFactory();
 
@@ -279,6 +280,10 @@ namespace PdfAutoSigner.Lib.Signatures
                     throw new ArgumentException("Not supported: " + hashAlgorithm + "with" + encryptionAlgorithm);
             }
 
+            if (session == null)
+            {
+                throw new ApplicationException("Session is not instantiated.");
+            }
             return session.Sign(mechanism, privateKeyHandle, message);
         }
     }

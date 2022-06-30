@@ -82,7 +82,7 @@ void RunOptions(CommandLineOptions options)
         {
 
             // Write file
-            using (FileStream outputFileStream = new FileStream(options.OutputFilePath, FileMode.Create, System.IO.FileAccess.Write))
+            using (var outputFileStream = new FileStream(options.OutputFilePath, FileMode.Create, System.IO.FileAccess.Write))
             {
                 outputStream.CopyTo(outputFileStream);
             }
