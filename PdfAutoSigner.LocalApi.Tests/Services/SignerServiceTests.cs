@@ -98,8 +98,8 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
         [AutoDomainData]
         public void Sign_SignActualPdf_ReturnsSignedStreamWithOneSignature([Frozen] Mock<ISignaturesProviderService> signaturesProviderServiceMock)
         {
-            string password = "pass";
-            var cert = X509CertificateFactory.CreateRsaCertificate(password);
+            string? password = null;
+            var cert = X509CertificateFactory.CreateRsaCertificate(password!);
             var certSignatures = new List<IExternalSignatureWithChain> { new X509Certificate2Signature(cert) };
             var signatureName = certSignatures[0].GetSignatureIdentifyingName();
             signaturesProviderServiceMock.Setup(p => p.GetAvailableSignatures()).Returns(certSignatures);
@@ -109,7 +109,7 @@ namespace PdfAutoSigner.LocalApi.Tests.Services
             using MemoryStream inputStream = new MemoryStream();
             ReadFile("hello.pdf", inputStream);
 
-            var outputStream = signerService.Sign(inputStream, signatureName, password);
+            var outputStream = signerService.Sign(inputStream, signatureName, password!);
 
             using var reader = new PdfReader(outputStream);
             using var doc = new PdfDocument(reader);

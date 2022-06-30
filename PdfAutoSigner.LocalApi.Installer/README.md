@@ -1,8 +1,7 @@
 ﻿Project built based on https://www.youtube.com/watch?v=6Yf-eDsRrnM
 
+# Project details 
 Install the WIX Toolset and the Wix Extension for Visual Studio from https://wixtoolset.org/
-
-The client has to run the msi as an administrator.
 
 Change the two ProductCode entries each time you change the version of the application. Never change the UpgradeCode.
 
@@ -12,3 +11,6 @@ Regarding the HeatDirectory there is a RunWixToolsOutOfProc line in the Property
 Also, regarding the HeatDirectory: we use a RemoveExeComponentsTransform.xslt. This is because we cannot easily exclude files from the harvesting process. This allows us to remove any executables. We need to manually add the executable for the local api in the Product.wxs file so that we can create a Windows Service that links to this executable.
 
 I recommend not to change the ProductCode at all. Keeping the same ProductCode will force the client to uninstall the previous version, which I think it is the safest approach. Uninstalling or installing the application should first cause the related existing Windows Service to uninstall.
+
+# Instructions for clients 
+The client has to run the msi as an administrator. He should also restart the PC after installing and uninstalling the application.
