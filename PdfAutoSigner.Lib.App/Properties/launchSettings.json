@@ -1,0 +1,15 @@
+{
+  "profiles": {
+    "PdfAutoSigner.Lib.App": {
+      "commandName": "Project"
+    },
+    "Lib.App - PKCS11": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../hello.pdf ../../../hello-signed-pkcs11.pdf \"C:\\Program Files (x86)\\Gemalto\\IDGo 800 PKCS#11\\IDPrimePKCS1164.dll\""
+    },
+    "Lib.App - Cert": {
+      "commandName": "Project",
+      "commandLineArgs": "../../../hello.pdf ../../../hello-signed-cert.pdf certSign -c"
+    }
+  }
+}

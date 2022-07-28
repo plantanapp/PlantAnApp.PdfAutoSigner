@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+
+	<?if $(var.Platform)=x64?>
+	<?define ProductCode="{2B5721CB-6EDD-4664-9680-0A296C908B57}"?>
+	<?else?>
+	<?define ProductCode="{2864F260-317C-4445-985D-A33C6DCAF8F0}"?>
+	<?endif?>
+	
+	<!-- Fixed upgrade id. Never change this. -->
+	<?define UpgradeCode="{660F96D0-F4A4-4609-AB2B-8F38D749A320}"?>
+	
+	<!-- Define main product -->
+	<Product Id="$(var.ProductCode)" 
+			 Name="!(loc.ProductName_$(var.Platform))" 
+			 Language="!(loc.Language)"
+			 Version="$(var.BuildVersion)"
+			 Manufacturer="!(loc.Company)" 
+			 UpgradeCode="$(var.UpgradeCode)">
+		
+		<!-- Provide package details -->
+		<Package InstallerVersion="200" 
+				 Compressed="yes" 
+				 InstallScope="perMachine"
+				 Platform="$(var.Platform)"
+				 Manufacturer="!(loc.Company)"
+				 Description="!(loc.Description)"
+				 Languages="!(loc.Language)"
+				 />
+
+		<!-- Downgrade error message  -->
+		<MajorUpgrade DowngradeErrorMessage="!(loc.DowngradeErrorMessage)" />
+		
+		<!-- Include .cab file into the .msi file -->
+		<MediaTemplate EmbedCab="yes"/>
+		
+		<!-- Create a an UI for the installer -->
+		<UIRef Id="WixUI_InstallDir"/>
+		<Property Id="WIXUI_INSTALLDIR" Value="INSTALLFOLDER"/>
+		
+		<WixVariable Id="WixUILicenseRtf" Value="$(var.ProjectDir)\..\license.rtf"/>
+
+		<!-- Define components, shortcuts, files etc. -->
+		<Feature Id="ProductFeature" Title="PdfAutoSigner" Level="1">
+			<ComponentGroupRef Id="PublishedComponents" />
+
+			<!-- <ComponentGroupRef Id="WindowsServiceComponents" /> -->
+			
+		</Feature>
+	</Product>
+
+	<Fragment>
+		<Directory Id="TARGETDIR" Name="SourceDir">
+
+			<?if $(var.Platform)=x64?>
+				<!-- Program Files (64bit) folder -->
+				<Directory Id="ProgramFiles64Folder">
+					<Directory Id="CompanyFolder" Name="!(loc.CompanyFolderName)">
+						<Directory Id="INSTALLFOLDER" Name="!(loc.ProductFolderName)" />
+					</Directory>	
+				</Directory>
+			<?else?>
+				<!-- Program Files (32bit) folder -->
+				<Directory Id="ProgramFilesFolder">
+					<Directory Id="CompanyFolder" Name="!(loc.CompanyFolderName)">
+						<Directory Id="INSTALLFOLDER" Name="!(loc.ProductFolderName)" />
+					</Directory>
+				</Directory>
+			<?endif?>
+			
+		</Directory>
+
+		<!-- Create a task that runs at logon for the current user -->
+		<!-- This allows us to access the certificate store for the current user -->
+		<!-- The NP flag allows us to run the task in the background -->
+		<CustomAction
+			Id="SetupScheduledTaskId"
+			Directory="CompanyFolder"
+            Return="check"
+            Execute="deferred"
+			Impersonate="yes"
+            ExeCommand="&quot;[SystemFolder]SCHTASKS.EXE&quot; /CREATE /SC ONLOGON /TN &quot;PdfAutoSigner&quot; /TR &quot;\&quot;[INSTALLFOLDER]PdfAutoSigner.LocalApi.exe\&quot;&quot; /NP" />
+
+		<CustomAction
+			Id="StopScheduledTaskId"
+			Directory="CompanyFolder"
+            Return="ignore"
+            Execute="immediate"
+			Impersonate="yes"
+            ExeCommand="&quot;[SystemFolder]SCHTASKS.EXE&quot; /END /TN &quot;PdfAutoSigner&quot;" />
+		
+		<CustomAction
+			Id="RemoveScheduledTaskId"
+			Directory="CompanyFolder"
+            Return="ignore"
+            Execute="immediate"
+			Impersonate="yes"
+            ExeCommand="&quot;[SystemFolder]SCHTASKS.EXE&quot; /DELETE /TN &quot;PdfAutoSigner&quot; /F" />
+
+		<InstallExecuteSequence>
+			<Custom Action="SetupScheduledTaskId" After="InstallFiles">NOT Installed AND NOT WIX_UPGRADE_DETECTED AND NOT WIX_DOWNGRADE_DETECTED</Custom>
+			<!--<Custom Action="StopScheduledTaskId" Before="RemoveFiles">Installed AND (REMOVE="ALL") AND NOT (WIX_UPGRADE_DETECTED OR UPGRADINGPRODUCTCODE)</Custom>-->
+			<!-- InstallValidate -->
+			<Custom Action="StopScheduledTaskId" Before="InstallValidate">Installed AND (REMOVE="ALL") AND NOT (WIX_UPGRADE_DETECTED OR UPGRADINGPRODUCTCODE)</Custom>
+			<Custom Action="RemoveScheduledTaskId" After="StopScheduledTaskId">Installed AND (REMOVE="ALL") AND NOT (WIX_UPGRADE_DETECTED OR UPGRADINGPRODUCTCODE)</Custom>
+		</InstallExecuteSequence>
+
+		
+	</Fragment>
+
+	<!-- <Fragment> -->
+		<!-- <ComponentGroup Id="WindowsServiceComponents" Directory="INSTALLFOLDER"> -->
+			<!-- <Component Id="WindowsServiceComponent"> -->
+				<!-- <File Id="WindowsServiceEXE"  -->
+					  <!-- Name="PdfAutoSigner.LocalApi.exe"  -->
+					  <!-- DiskId="1" Source="$(var.BasePath)\PdfAutoSigner.LocalApi.exe" Vital="yes" KeyPath="yes"/> -->
+				<!-- <ServiceInstall Id="PlantAnApp.PdfAutoSigner" -->
+								<!-- Name="PlantAnApp.PdfAutoSigner" -->
+								<!-- DisplayName="!(loc.ServiceDisplayName)" -->
+								<!-- Description="!(loc.Description)" -->
+								<!-- Start="auto" -->
+								<!-- Type="ownProcess" -->
+								<!-- ErrorControl="normal" -->
+								<!-- Account="LocalSystem" -->
+								<!-- Vital="yes" -->
+								<!-- Interactive="no"/> -->
+				<!-- <ServiceControl Id="PlantAnApp.PdfAutoSigner"  -->
+								<!-- Name="PlantAnApp.PdfAutoSigner"  -->
+								<!-- Start="install"  -->
+								<!-- Stop="both"  -->
+								<!-- Remove="uninstall"  -->
+								<!-- Wait="yes"/> -->
+			<!-- </Component> -->
+		<!-- </ComponentGroup> -->
+		<!-- <DirectoryRef Id="INSTALLFOLDER" FileSource="$(var.BasePath)"> -->
+		<!-- </DirectoryRef> -->
+	<!-- </Fragment> -->
+</Wix>

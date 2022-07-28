@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<WixLocalization Culture="en-us" xmlns="http://schemas.microsoft.com/wix/2006/localization">
+	<String Id="Company">Plant An App</String>
+	<String Id="CompanyFolderName">PlantAnApp</String>
+	<String Id="ProductFolderName">PdfAutoSigner</String>
+	<String Id="ProductName_x86">Pdf Auto Signer (32bit)</String>
+	<String Id="ProductName_x64">Pdf Auto Signer (64bit)</String>
+	<String Id="ServiceDisplayName">PlantAnApp.PdfAutoSigner</String>
+	<String Id="Language">1033</String>
+	<String Id="Description">Auto signs PDFs using USB tokens.</String>
+	<String Id="DowngradeErrorMessage">A newer version of Pdf Auto Signer is already installed.</String>
+</WixLocalization>

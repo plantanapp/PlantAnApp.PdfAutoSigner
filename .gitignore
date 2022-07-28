@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+**/bin/
+**/obj/
+.vs/
+**/*.csproj.user
+
+**/hello-signed-pkcs11.pdf
+**/hello-signed-cert.pdf
+PdfAutoSigner.LocalApi.Installer/Installs/**
+PdfAutoSigner.LocalApi.Installer/ComponentsGenerated.wxs
+/PdfAutoSigner.LocalApi.Installer/ComponentsGenerated.wxs

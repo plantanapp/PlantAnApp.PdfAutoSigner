@@ -1,0 +1,37 @@
+﻿{
+    "TokensConfig": {
+        "Pkcs11Devices": [
+            {
+                "Name": "SafeNet",
+                "Pkcs11LibPaths": [
+                    {
+                        "OS": "Windows",
+                        "Architecture": "X64",
+                        "LibPath": "C:\\Program Files (x86)\\Gemalto\\IDGo 800 PKCS#11\\IDPrimePKCS1164.dll"
+                    },
+                    {
+                        "OS": "Windows",
+                        "Architecture": "X86",
+                        "LibPath": "C:\\Program Files (x86)\\Gemalto\\IDGo 800 PKCS#11\\IDPrimePKCS11.dll"
+                    },
+                    {
+                        "OS": "MacOS",
+                        "Architecture": "X64",
+                        "LibPath": "/usr/local/lib/libeTPkcs11.dylib"
+                    },
+                    {
+                        "OS": "MacOS",
+                        "Architecture": "X86",
+                        "LibPath": "/usr/local/lib/libeTPkcs11.dylib"
+                    }
+                ]
+            }
+        ],
+        "Certificates": [
+            {
+                "Name": "CertSign",
+                "CertificateIssuerName": "certSIGN"
+            }
+        ]
+    }
+}

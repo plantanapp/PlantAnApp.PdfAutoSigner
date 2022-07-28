@@ -1,0 +1,13 @@
+<Project>
+    <PropertyGroup>
+        <Version>1.0.0.0</Version>
+        <AssemblyVersion>1.0.0.0</AssemblyVersion>
+        <FileVersion>1.0.0.0</FileVersion>
+        <Company>PlantAnApp, iText Group</Company>
+        <Authors>Plant An App, iText Group</Authors>
+        <Copyright>(C) Plant An App, (C) iText Group</Copyright>
+		<PackageLicenseFile>C:\Work\Projects\PdfAutoSignerAndJava\_code\PlantAnApp.PdfAutoSigner\license.rtf</PackageLicenseFile>
+		<PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+		<RepositoryUrl>https://github.com/razvanionapp/PlantAnApp.PdfAutoSigner.git</RepositoryUrl>
+    </PropertyGroup>
+</Project>
